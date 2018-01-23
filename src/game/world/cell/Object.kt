@@ -1,8 +1,8 @@
 package game.world.cell
 
 open abstract class Object(
-    val x:Int, 
-    val y:Int, 
+    var x:Int,
+    var y:Int,
     val breakByExplosion:Boolean, 
     var collision:Int
 )
