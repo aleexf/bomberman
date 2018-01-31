@@ -1,4 +1,4 @@
-package game
+package com.aleexf.game
 
 enum class Direction(val dx:Int, val dy:Int) {
     UP(-1, 0),

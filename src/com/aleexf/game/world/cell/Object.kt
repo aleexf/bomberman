@@ -1,4 +1,4 @@
-package game.world.cell
+package com.aleexf.game.world.cell
 
 open abstract class Object(
     var x:Int,

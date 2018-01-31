@@ -1,24 +1,32 @@
-package game
+package com.aleexf.game
 
+import com.aleexf.game.Direction
+import com.aleexf.game.world.GameWorld
+import com.aleexf.game.world.cell.Bomb
+import com.aleexf.game.world.cell.Object
 import java.util.Random
-
-import game.Direction
-import game.world.GameWorld
-import game.world.cell.Bomb
-import game.world.cell.Object
+import kotlin.system.exitProcess
 
 class MovingControl(val player:Player):Thread() {
     override fun run() {
+        while (true) {
+            if (!player.alive) sleep(100)
 
+        }
     }
 }
 
 class Player(x:Int, y:Int, val name:String, val world:GameWorld): Object(x, y, true, 2) {
     val movesChecker:MovingControl
     val playerId:Int
+    var alive:Boolean
     init {
-        // temp
-        playerId = 0
+        world.connection.sendMessage("get_player_id")
+        playerId = world.connection.getInt()
+        if (playerId == -1) {
+            exitProcess(0);
+        }
+        alive = true
         movesChecker = MovingControl(this)
     }
     var bombDelay:Int = 3000
