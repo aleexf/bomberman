@@ -23,5 +23,4 @@ class Connection(val nick:String, val ip:String) {
         oStream.println(str);
     }
     fun getMessage() = iStream.readLine()
-    fun getInt() = iStream.read()
 }
