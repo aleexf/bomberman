@@ -12,7 +12,7 @@ import javax.imageio.ImageIO
 
 import com.aleexf.game.MovingControl
 import com.aleexf.game.world.GameWorld
-
+import com.aleexf.logging.logger
 
 
 class WorldDrawerTool(var world:GameWorld) :JPanel() {
@@ -23,6 +23,7 @@ class WorldDrawerTool(var world:GameWorld) :JPanel() {
         iBlock = ImageIO.read(File(".\\data\\texture\\block.png"))
         iBox = ImageIO.read(File(".\\data\\texture\\box.png"))
         iPlayer = ImageIO.read(File(".\\data\\texture\\player\\1\\test.png"))
+        this.isFocusable = true
     }
     override fun paint(graph:Graphics) {
         /* Blocks */
@@ -46,22 +47,27 @@ class WorldDrawerTool(var world:GameWorld) :JPanel() {
 }
 
 
-class WorldDrawer(var world: GameWorld):Thread() {
-    val frame:JFrame
-    val delay:Long
+class WorldDrawer(var world: GameWorld, val localID:Int):Thread() {
+    private val frame:JFrame
+    private val delay:Long
+    private val painter:WorldDrawerTool
+    private val movingControl:MovingControl
     init {
+        painter = WorldDrawerTool(world)
+        movingControl = MovingControl(world.connection, world.findPlayerById(localID))
         isDaemon = true
         frame = JFrame("Bomberman")
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.setSize(800, 600);
         frame.isResizable = false
         delay = 1000 / 60
-
     }
     override fun run() {
-        val painter:WorldDrawerTool = WorldDrawerTool(world)
+        painter.addKeyListener(movingControl.keyboard)
         frame.add(painter)
         frame.isVisible = true
+        movingControl.start()
+        logger.info("[Drawer]: Starting painting")
         while (true) {
             sleep(delay);
             painter.repaint()

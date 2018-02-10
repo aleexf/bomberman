@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 
 class Logger(val filename:String) {
     private val formatter = SimpleDateFormat("[dd.MM.yyyy HH:mm:ss]")
-    private val oStream = PrintWriter(FileWriter(filename, true), true)
+    private val oStream = PrintWriter(FileWriter(filename, false), true)
     private fun getDate() = formatter.format(Date())
     fun info(msg:String) = oStream.println("${getDate()}[INFO]: $msg")
     fun warning(msg:String) = oStream.println("${getDate()}[WARNING]: $msg")
