@@ -1,10 +1,11 @@
 package com.aleexf.net.server
 
-import com.aleexf.logging.logger
+import java.net.Socket
+import java.io.PrintWriter
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.net.Socket
+
+import com.aleexf.logging.logger
 
 class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
     val nick:String
@@ -32,10 +33,14 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         logger.info("[Server]: Process started")
         while (!socket.isClosed) {
             val message = iStream.readLine()
-            logger.info("[Server]: Got message from $nick($id) '$message'")
             when (message) {
                 "disconnect $id" -> this.close()
                 "get_world_id" -> this.sendMessage(server.worldId.toString())
+                "game init" -> {
+                    for (client in server.connections) {
+                        sendMessage("player connected ${client.nick} ${client.id}")
+                    }
+                }
                 else -> {
                     for (client in server.connections) {
                         client.sendMessage(message)

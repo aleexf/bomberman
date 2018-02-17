@@ -1,8 +1,9 @@
 package com.aleexf.net.server
 
-import com.aleexf.logging.logger
 import java.net.Socket
 import java.net.ServerSocket
+
+import com.aleexf.logging.logger
 
 class Server(val worldId:Int):Thread() {
     val connections:MutableList<Connection> = mutableListOf()

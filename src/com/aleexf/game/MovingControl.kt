@@ -10,11 +10,11 @@ import com.aleexf.game.drawer.WorldDrawer
 class MovingControl(val connection:Connection, val player:Player):Thread() {
     val keyboard:KeyboardControl = KeyboardControl()
     init {
-        isDaemon = true
+       isDaemon = true
     }
     override fun run() {
         while (true) {
-            sleep(100)
+            sleep(50)
             if (!player.alive) continue
             if (keyboard.isKeyPressed(KeyEvent.VK_UP)) {
                 connection.sendMessage("action move ${player.playerId} UP")

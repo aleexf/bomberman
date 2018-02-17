@@ -3,7 +3,6 @@ package com.aleexf.game.world
 import com.aleexf.game.Direction
 import com.aleexf.game.Player
 
-
 class WorldUpdater(val world:GameWorld):Thread() {
     override fun run() {
         while (true) {
@@ -39,20 +38,12 @@ class WorldUpdater(val world:GameWorld):Thread() {
                     when (msg[1]) {
                         "move" -> {
                             val playerId = msg[2].toInt()
-                            for (player in world.players) {
-                                if (player.playerId == playerId) {
-                                    player.move(Direction.valueOf(msg[3]))
-                                }
-                            }
+                            world.findPlayerById(playerId).move(Direction.valueOf(msg[3]))
                         }
                         "place_bomb" -> {
                             val playerId = msg[2].toInt()
-                            for (player in world.players) {
-                                if (player.playerId == playerId) {
-                                    val detonator = Detonator(world, player)
-                                    detonator.start()
-                                }
-                            }
+                            val detonator = Detonator(world, world.findPlayerById(playerId))
+                            detonator.start()
                         }
                         "picked_bonus" -> {
                             // Will be added soon //

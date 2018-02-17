@@ -1,6 +1,5 @@
 package com.aleexf.game.world
 
-import com.aleexf.game.Direction
 import java.io.BufferedReader
 import java.io.FileReader
 
@@ -8,7 +7,8 @@ import com.aleexf.game.Player
 import com.aleexf.game.world.cell.*
 import com.aleexf.net.client.Connection
 
-class GameWorld(val nick:String, val ip:String, val connection:Connection) {
+
+class GameWorld(val nick:String, val connection:Connection) {
     val rows:Int
     val cols:Int
     val spawnCrd: MutableMap<Int, List<Int>> = mutableMapOf()
@@ -25,6 +25,14 @@ class GameWorld(val nick:String, val ip:String, val connection:Connection) {
         loadWorld(connection.getMessage().toInt())
         val worldUpdater:WorldUpdater = WorldUpdater(this)
         worldUpdater.start()
+    }
+    fun findPlayerById(playerId: Int):Player {
+        for (player in players) {
+            if (player.playerId == playerId) {
+                return player
+            }
+        }
+        throw NullPointerException("Player not found")
     }
     fun anyObject(collision: Int, x: Int, y: Int): Boolean = usedGrid.contains(listOf(x, y))
     fun loadWorld(worldId:Int) {
@@ -48,7 +56,7 @@ class GameWorld(val nick:String, val ip:String, val connection:Connection) {
                         usedGrid.add(listOf(i, j))
                     }
                     else -> {
-                        spawnCrd[row[j].toInt()] = listOf(i, j)
+                        spawnCrd[row[j].toInt()-48] = listOf(i*32, j*32)
                     }
                 }
             }
@@ -56,64 +64,3 @@ class GameWorld(val nick:String, val ip:String, val connection:Connection) {
     }
 }
 
-
-class WorldUpdater(val world:GameWorld):Thread() {
-    override fun run() {
-        while (true) {
-            val msg:List<String> = world.connection.getMessage().split(' ')
-            when (msg[0]) {
-                "player" -> {
-                    when (msg[1]) {
-                        "connected" -> world.players.add(Player(0, 0, msg[2], msg[3].toInt(), world))
-                        "disconnected" -> {
-                            val playerId = msg[2].toInt()
-                            for (player in world.players) {
-                                if (player.playerId == playerId) {
-                                    world.players.remove(player)
-                                    break
-                                }
-                            }
-                        }
-                    }
-                }
-                "game" -> {
-                    when (msg[1]) {
-                        "reload_map" -> world.loadWorld(msg[1].toInt())
-                        "start" -> {
-                            for (player in world.players) {
-                                player.alive = true
-                                player.x = world.spawnCrd[player.playerId]?.get(0) ?: -1
-                                player.y = world.spawnCrd[player.playerId]?.get(0) ?: -1
-                            }
-                        }
-                    }
-                }
-                "action" -> {
-                    when (msg[1]) {
-                        "move" -> {
-                            val playerId = msg[2].toInt()
-                            for (player in world.players) {
-                                if (player.playerId == playerId) {
-                                    player.move(Direction.valueOf(msg[3]))
-                                }
-                            }
-                        }
-                        "place_bomb" -> {
-                            val playerId = msg[2].toInt()
-                            for (player in world.players) {
-                                if (player.playerId == playerId) {
-                                    val bomb = player.placeBomb()
-                                    world.bombs.add(bomb)
-                                    // Wait for bomb explosion //
-                                }
-                            }
-                        }
-                        "picked_bonus" -> {
-                            // Will be added soon //
-                        }
-                    }
-                }
-            }
-        }
-    }
-}

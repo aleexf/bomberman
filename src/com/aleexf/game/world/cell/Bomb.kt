@@ -1,3 +1,6 @@
 package com.aleexf.game.world.cell
 
-class Bomb(x:Int, y:Int, val delay:Long):Object(x, y, true, 3)
+import com.aleexf.game.Player
+
+class Bomb(x:Int, y:Int, val delay:Long, val owner:Player, val explosionLen: Int):
+        Object(x, y, true, 3)

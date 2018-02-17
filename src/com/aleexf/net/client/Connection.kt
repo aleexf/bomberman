@@ -1,11 +1,11 @@
 package com.aleexf.net.client
 
-import com.aleexf.logging.logger
 import java.net.Socket
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
+import com.aleexf.logging.logger
 
 class Connection(val nick:String, val ip:String) {
     val socket:Socket
