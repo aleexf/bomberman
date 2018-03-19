@@ -11,6 +11,7 @@ import com.aleexf.net.client.Connection
 class GameWorld(val nick:String, val connection:Connection) {
     val rows:Int
     val cols:Int
+    val worldId:Int
     val spawnCrd: MutableMap<Int, List<Int>> = mutableMapOf()
     val blocks: MutableList<Block> = mutableListOf()
     val boxes: MutableSet<Box> = mutableSetOf()
@@ -22,17 +23,15 @@ class GameWorld(val nick:String, val connection:Connection) {
         rows = 15
         cols = 15
         connection.sendMessage("get_world_id")
-        loadWorld(connection.getMessage().toInt())
+        worldId = connection.getMessage().toInt()
+        loadWorld(worldId)
         val worldUpdater:WorldUpdater = WorldUpdater(this)
         worldUpdater.start()
     }
     fun findPlayerById(playerId: Int):Player {
-        for (player in players) {
-            if (player.playerId == playerId) {
-                return player
-            }
-        }
-        throw NullPointerException("Player not found")
+        if (players.count{it.playerId == playerId} == 0)
+            throw NullPointerException("Player not found")
+        return players.filter{it.playerId == playerId}.first()
     }
     fun anyObject(collision: Int, x: Int, y: Int): Boolean = usedGrid.contains(listOf(x, y))
     fun loadWorld(worldId:Int) {

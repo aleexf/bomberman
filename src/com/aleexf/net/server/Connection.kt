@@ -19,7 +19,7 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         } else {
             nick = "noname"
         }
-        logger.info("[Server]: $nick $id")
+        logger.info("[Server]: $nick connected with id $id")
         if (id == -1) {
             this.sendMessage("Server is full")
             this.close()
@@ -27,10 +27,9 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
             this.sendMessage(id.toString())
             this.start()
         }
-        logger.info("[Server]: Nick $nick")
     }
     override fun run() {
-        logger.info("[Server]: Process started")
+        logger.info("[Server]: Server created")
         while (!socket.isClosed) {
             val message = iStream.readLine()
             when (message) {

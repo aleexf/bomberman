@@ -1,15 +1,6 @@
 package com.aleexf.game.drawer
 
-import java.io.File
-import java.awt.Graphics
-import java.awt.Image
-import java.awt.Color
-import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import javax.swing.JFrame
-import javax.swing.JPanel
-import javax.imageio.ImageIO
 
 import com.aleexf.game.MovingControl
 import com.aleexf.game.world.GameWorld

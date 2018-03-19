@@ -50,27 +50,33 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         var px = bomb.x
         var py = bomb.y
         doExplosion(px, py)
-        for (i in 0..bomb.explosionLen) {
+        for (i in 1..bomb.explosionLen) {
             --px
             if (doExplosion(px, py)) break
         }
         px = bomb.x
         py = bomb.y
-        for (i in 0..bomb.explosionLen) {
+        for (i in 1..bomb.explosionLen) {
             ++px
             if (doExplosion(px, py)) break
         }
         px = bomb.x
         py = bomb.y
-        for (i in 0..bomb.explosionLen) {
+        for (i in 1..bomb.explosionLen) {
             ++py
             if (doExplosion(px, py)) break
         }
         px = bomb.x
         py = bomb.y
-        for (i in 0..bomb.explosionLen) {
+        for (i in 1..bomb.explosionLen) {
             --py
             if (doExplosion(px, py)) break
+        }
+        if (world.players.count {it.alive} == 0) {
+            sleep(1000)
+            world.connection.sendMessage("game reload_map ${world.worldId}")
+            sleep(1000)
+            world.connection.sendMessage("game start")
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.aleexf.game.drawer
 
 import java.awt.Graphics
-import java.awt.Image
-import java.io.File
-import javax.imageio.ImageIO
 import javax.swing.JPanel
 
 import com.aleexf.game.Direction
