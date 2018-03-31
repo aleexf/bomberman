@@ -29,21 +29,19 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         }
     }
     override fun run() {
-        logger.info("[Server]: Server created")
         while (!socket.isClosed) {
             val message = iStream.readLine()
             when (message) {
                 "disconnect $id" -> this.close()
                 "get_world_id" -> this.sendMessage(server.worldId.toString())
                 "game init" -> {
-                    for (client in server.connections) {
-                        sendMessage("player connected ${client.nick} ${client.id}")
+                    server.connections.forEach{
+                        it.sendMessage("player connected ${nick} ${id}")
+                        if (it != this) sendMessage("player connected ${it.nick} ${it.id}")
                     }
                 }
                 else -> {
-                    for (client in server.connections) {
-                        client.sendMessage(message)
-                    }
+                    server.connections.forEach{it.sendMessage(message)}
                 }
             }
         }

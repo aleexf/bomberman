@@ -10,6 +10,9 @@ class Server(val worldId:Int):Thread() {
     val unusedIds:MutableList<Int> = mutableListOf(1, 2, 3, 4)
     private val port = 8888
     private var server:ServerSocket = ServerSocket(port)
+    init {
+        isDaemon = true
+    }
     override fun run() {
         while (true) {
             val client:Socket = server.accept()

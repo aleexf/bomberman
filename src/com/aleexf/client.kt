@@ -1,10 +1,11 @@
+import javax.swing.JOptionPane
+
 import com.aleexf.logging.logger
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
 import com.aleexf.net.client.Connection
 import com.aleexf.net.server.Server
 import com.aleexf.gui.MainMenu
-import javax.swing.JOptionPane
 
 fun main(args:Array<String>) {
     val menu = MainMenu()
@@ -12,6 +13,7 @@ fun main(args:Array<String>) {
     while (menu.notClosed()) Thread.sleep(30)
     logger.info("[GUI]: Ip address: ${menu.IpAddress.toString()}")
     logger.info("[GUI]: Nick: ${menu.nick.toString()}")
+    menu.IpAddress = menu.IpAddress?.split('.')?.map{it.toInt().toString()}?.joinToString(separator = ".")
     if (menu.IpAddress == "127.0.0.1") {
         try {
             val localhost = Server(1)
@@ -20,6 +22,7 @@ fun main(args:Array<String>) {
             logger.error("[Server]: Server falls down")
         }
     }
+    Thread.sleep(1000)
     try {
         logger.info("[Client]: Connecting to ${menu.IpAddress.toString()}...")
         val connection = Connection(menu.nick.toString(), menu.IpAddress.toString())

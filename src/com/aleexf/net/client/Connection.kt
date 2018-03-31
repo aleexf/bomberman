@@ -27,6 +27,6 @@ class Connection(val nick:String, val ip:String) {
             localId = msg.toInt()
         }
     }
-    fun sendMessage(str:String) = oStream.println(str);
+    fun sendMessage(str:String) = oStream.println(str)
     fun getMessage() = iStream.readLine()
 }

@@ -40,7 +40,7 @@ class GameWorld(val nick:String, val connection:Connection) {
         bombs.clear();
         explosion.clear();
         usedGrid.clear();
-        val LevelReader = BufferedReader(FileReader(".\\data\\levels\\$worldId.level"))
+        val LevelReader = BufferedReader(FileReader("./data/levels/$worldId.level"))
         for (i in 0..14) {
             val row:String = LevelReader.readLine()
             for (j in 0..14) {
