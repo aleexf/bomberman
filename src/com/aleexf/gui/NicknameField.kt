@@ -35,4 +35,5 @@ class NicknameField(val x:Int, val y:Int, val width:Int, val height:Int):KeyAdap
     private fun isCorrect(str:String) =
             str.count {it in 'a'..'z' || it in 'A'..'Z'
                 || it in '0'..'9' || it == '.' || it == '-' || it == '_'} == str.length
+                && str.length <= maxlength
 }

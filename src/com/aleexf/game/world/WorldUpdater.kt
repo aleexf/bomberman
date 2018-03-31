@@ -27,6 +27,7 @@ class WorldUpdater(val world:GameWorld):Thread() {
                         "reload_map" -> world.loadWorld(msg[2].toInt())
                         "start" -> {
                             for (player in world.players) {
+                                player.defaultParams()
                                 player.alive = true
                                 player.x = world.spawnCrd[player.playerId]?.get(0) ?: -1
                                 player.y = world.spawnCrd[player.playerId]?.get(0) ?: -1

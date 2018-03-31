@@ -26,4 +26,13 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
         direction = dir
         animType = (animType+1) % 3
     }
+    fun defaultParams() {
+        alive = false
+        bombDelay = 3000
+        explosionLen = 2
+        speed = 5
+        animType = 0
+        direction = Direction.DOWN
+        availableBombs = 1
+    }
 }

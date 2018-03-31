@@ -4,6 +4,7 @@ import com.aleexf.game.drawer.WorldDrawer
 import com.aleexf.net.client.Connection
 import com.aleexf.net.server.Server
 import com.aleexf.gui.MainMenu
+import javax.swing.JOptionPane
 
 fun main(args:Array<String>) {
     val menu = MainMenu()
@@ -31,6 +32,10 @@ fun main(args:Array<String>) {
         connection.sendMessage("game start")
     } catch(e:Exception) {
         logger.error("[Client]: Fatal")
+        JOptionPane.showMessageDialog(null,
+                "Client fatal error.\nLook at logs to get more information",
+                "Fatal error",
+                JOptionPane.ERROR_MESSAGE)
     }
 }
 

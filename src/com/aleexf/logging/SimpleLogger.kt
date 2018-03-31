@@ -14,4 +14,4 @@ class Logger(val filename:String) {
     fun error(msg:String) = oStream.println("${getDate()}[ERROR]: $msg")
 }
 
-val logger = Logger(".\\logfile.log")
+val logger = Logger("./logfile.log")

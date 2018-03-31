@@ -8,9 +8,11 @@ import java.awt.event.KeyAdapter
 import java.awt.event.ActionListener
 import java.awt.event.ItemListener
 import javax.swing.JFrame
+import javax.swing.JOptionPane
 
 import com.aleexf.gui.NicknameField
 import com.aleexf.gui.IpAddressField
+
 
 class MainMenu {
     var nick:String? = null
@@ -23,12 +25,24 @@ class MainMenu {
     init {
         startButton.setBounds(70, 80, 100, 20)
         startButton.addActionListener(ActionListener() {
-            window.isVisible = false
-            window.dispose()
-            if (IpAddress == null) {
-                IpAddress = ipTextField.textField.text
+            if (IpAddress == null && ipTextField.textField.text.contains('*')) {
+                JOptionPane.showMessageDialog(null,
+                        """Enter an ip address or create your own server""",
+                        "Error: Incorrect ip address found",
+                        JOptionPane.ERROR_MESSAGE)
+            } else if (nickTextField.textField.text == "Enter your nickname...") {
+                JOptionPane.showMessageDialog(null,
+                        """Enter your nickname""",
+                        "Error: Incorrect nickname found",
+                        JOptionPane.ERROR_MESSAGE)
+            } else {
+                window.isVisible = false
+                window.dispose()
+                if (IpAddress == null) {
+                    IpAddress = ipTextField.textField.text
+                }
+                nick = nickTextField.textField.text
             }
-            nick = nickTextField.textField.text
         })
         localhostCheckbox.setBounds(15, 55, 175, 15)
         localhostCheckbox.addItemListener(ItemListener {
