@@ -5,7 +5,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
-import com.aleexf.logging.logger
+import com.aleexf.logging.Logger
 
 class Connection(val nick:String, val ip:String) {
     val socket:Socket
@@ -20,7 +20,7 @@ class Connection(val nick:String, val ip:String) {
         this.sendMessage("connected\n$nick")
         val msg = this.getMessage()
         if (msg == "Server is full") {
-            logger.info("Server is full")
+            Logger.info("Server is full")
             localId = -1
             System.exit(0)
         } else {

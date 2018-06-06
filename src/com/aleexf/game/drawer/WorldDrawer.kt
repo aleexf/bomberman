@@ -3,6 +3,7 @@ package com.aleexf.game.drawer
 import javax.swing.JFrame
 
 import com.aleexf.game.MovingControl
+import com.aleexf.game.KeyboardControl
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawerTool
 import com.aleexf.game.world.ExplosionAnimator
@@ -18,6 +19,7 @@ class WorldDrawer(var world: GameWorld, val localID:Int):Thread() {
         painter = WorldDrawerTool(world)
         movingControl = MovingControl(world.connection, world.findPlayerById(localID))
         explosionAnimator = ExplosionAnimator(world)
+
         isDaemon = true
         frame = JFrame("Bomberman")
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
@@ -26,11 +28,12 @@ class WorldDrawer(var world: GameWorld, val localID:Int):Thread() {
         delay = 1000 / 60
     }
     override fun run() {
-        painter.addKeyListener(movingControl.keyboard)
+        painter.addKeyListener(KeyboardControl)
         frame.add(painter)
         frame.isVisible = true
         movingControl.start()
         explosionAnimator.start()
+
         while (true) {
             sleep(delay);
             painter.repaint()

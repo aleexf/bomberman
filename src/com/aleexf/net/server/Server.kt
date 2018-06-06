@@ -3,11 +3,11 @@ package com.aleexf.net.server
 import java.net.Socket
 import java.net.ServerSocket
 
-import com.aleexf.logging.logger
+import com.aleexf.logging.Logger
 
 class Server(val worldId:Int):Thread() {
     val connections:MutableList<Connection> = mutableListOf()
-    val unusedIds:MutableList<Int> = mutableListOf(1, 2, 3, 4)
+    val unusedIds:MutableList<Int> = mutableListOf(0, 1, 2, 3)
     private val port = 8888
     private var server:ServerSocket = ServerSocket(port)
     init {
@@ -16,7 +16,7 @@ class Server(val worldId:Int):Thread() {
     override fun run() {
         while (true) {
             val client:Socket = server.accept()
-            logger.info("[Server]: Got new connection")
+            Logger.info("[Server]: Got new connection")
             var clientId = -1
             if (unusedIds.isNotEmpty()) {
                 clientId = unusedIds[0]
@@ -26,9 +26,7 @@ class Server(val worldId:Int):Thread() {
         }
     }
     fun closeConnections() {
-        for (con in connections) {
-            con.close()
-        }
+        connections.forEach{ it.close() }
         server.close()
     }
 }

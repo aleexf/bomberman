@@ -2,19 +2,16 @@ package com.aleexf.gui
 
 import java.awt.Button
 import java.awt.Checkbox
-import java.awt.TextField
-import java.awt.event.KeyEvent
-import java.awt.event.KeyAdapter
 import java.awt.event.ActionListener
 import java.awt.event.ItemListener
 import javax.swing.JFrame
-import javax.swing.JOptionPane
 
 import com.aleexf.gui.NicknameField
 import com.aleexf.gui.IpAddressField
+import com.aleexf.logging.Logger
 
 
-class MainMenu {
+class MainMenu:Thread() {
     var nick:String? = null
     var IpAddress:String? = null
     private val window = JFrame("Bomberman: Menu")
@@ -26,15 +23,13 @@ class MainMenu {
         startButton.setBounds(70, 80, 100, 20)
         startButton.addActionListener(ActionListener() {
             if (IpAddress == null && ipTextField.textField.text.contains('*')) {
-                JOptionPane.showMessageDialog(null,
-                        """Enter an ip address or create your own server""",
-                        "Error: Incorrect ip address found",
-                        JOptionPane.ERROR_MESSAGE)
+                Logger.error("Error: Incorrect ip address found",
+                        "Enter an ip address or create your own server",
+                        false)
             } else if (nickTextField.textField.text == "Enter your nickname...") {
-                JOptionPane.showMessageDialog(null,
-                        """Enter your nickname""",
-                        "Error: Incorrect nickname found",
-                        JOptionPane.ERROR_MESSAGE)
+                Logger.error("Error: Incorrect nickname found",
+                        "Enter your nickname",
+                        false)
             } else {
                 window.isVisible = false
                 window.dispose()
@@ -46,7 +41,7 @@ class MainMenu {
         })
         localhostCheckbox.setBounds(15, 55, 175, 15)
         localhostCheckbox.addItemListener(ItemListener {
-            if (it != null) {
+            it.let {
                 IpAddress = when(IpAddress) {
                     "127.0.0.1" -> null
                     else -> "127.0.0.1"
@@ -66,6 +61,13 @@ class MainMenu {
         window.layout = null
         window.isResizable = false
         window.isVisible = true
+
+        this.run()
     }
-    fun notClosed() = window.isVisible
+    override fun run() {
+        Logger.info("Process main menu started")
+        while (window.isVisible) {
+            sleep(100)
+        }
+    }
 }

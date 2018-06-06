@@ -5,6 +5,7 @@ import javax.swing.JPanel
 
 import com.aleexf.game.Direction
 import com.aleexf.game.world.GameWorld
+import com.aleexf.game.drawer.TextureManager
 
 class WorldDrawerTool(var world: GameWorld) : JPanel() {
     init {
@@ -14,7 +15,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
         /* Blocks */
         for (x in 0..14) {
             for (y in 0..14) {
-                graph.drawImage(iFloor,
+                graph.drawImage(TextureManager.iFloor,
                         y*32, x*32,
                         y*32+32, x*32+32,
                         0, 0,
@@ -24,7 +25,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
             }
         }
         for (block in world.blocks) {
-            graph.drawImage(iBlock,
+            graph.drawImage(TextureManager.iBlock,
                     block.y*32, block.x*32,
                     block.y*32+32, block.x*32+32,
                     0, 0,
@@ -32,7 +33,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                     null)
         }
         for (box in world.boxes) {
-            graph.drawImage(iBox,
+            graph.drawImage(TextureManager.iBox,
                     box.y*32, box.x*32,
                     box.y*32+32, box.x*32+32,
                     0, 0,
@@ -41,8 +42,8 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
         }
         for (bomb in world.bombs) {
             graph.drawImage(when(bomb.delay) {
-                                3000L -> iBomb
-                                else -> iToxicBomb
+                                3000L -> TextureManager.iBomb
+                                else -> TextureManager.iToxicBomb
                             },
                     bomb.y*32, bomb.x*32,
                     bomb.y*32+32, bomb.x*32+32,
@@ -59,7 +60,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                 Direction.LEFT -> 6
                 Direction.RIGHT -> 9
             }
-            graph.drawImage(iPlayer[player.playerId][imgId+player.animType],
+            graph.drawImage(TextureManager.iPlayer[player.playerId][imgId+player.animType],
                     player.y, player.x,
                     player.y+32, player.x+32,
                     0, 0,
@@ -68,7 +69,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
             )
         }
         for (explosion in world.explosion) {
-            graph.drawImage(iExplosion[explosion.animType],
+            graph.drawImage(TextureManager.iExplosion[explosion.animType],
                     explosion.y*32, explosion.x*32,
                     explosion.y*32+32, explosion.x*32+32,
                     0, 0,
