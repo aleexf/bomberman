@@ -7,9 +7,10 @@ import com.aleexf.game.KeyboardControl
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawerTool
 import com.aleexf.game.world.ExplosionAnimator
+import com.aleexf.net.client.Connection
 
 
-class WorldDrawer(var world: GameWorld, val localID:Int):Thread() {
+class WorldDrawer(var world: GameWorld, val localID:Int, val connection:Connection):Thread() {
     private val frame:JFrame
     private val delay:Long
     private val painter:WorldDrawerTool
@@ -17,7 +18,7 @@ class WorldDrawer(var world: GameWorld, val localID:Int):Thread() {
     private val explosionAnimator:ExplosionAnimator
     init {
         painter = WorldDrawerTool(world)
-        movingControl = MovingControl(world.connection, world.findPlayerById(localID))
+        movingControl = MovingControl(connection, world.findPlayerById(localID))
         explosionAnimator = ExplosionAnimator(world)
 
         isDaemon = true

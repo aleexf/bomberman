@@ -11,12 +11,12 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         val bomb:Bomb = player.placeBomb()
         bomb.owner.availableBombs--
         world.bombs.add(bomb)
-        world.usedGrid.add(listOf(bomb.x, bomb.y))
+        world.usedGrid.add(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         sleep(bomb.delay)
         if (!world.bombs.contains(bomb)) return
         detonate(bomb)
     }
-    fun doExplosion(px:Int, py:Int):Boolean {
+    private fun doExplosion(px:Int, py:Int):Boolean {
         for (block in world.blocks) {
             if (block.x == px && block.y == py) {
                 return true
@@ -36,16 +36,16 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         for (box in world.boxes) {
             if (box.x == px && box.y == py) {
                 world.boxes.remove(box)
-                world.usedGrid.remove(listOf(box.x, box.y))
+                world.usedGrid.remove(Pair(box.collision, Pair(box.x, box.y)))
                 return true
             }
         }
         return false
     }
-    fun detonate(bomb:Bomb) {
+    private fun detonate(bomb:Bomb) {
         if (!world.bombs.contains(bomb)) return
         world.bombs.remove(bomb)
-        world.usedGrid.remove(listOf(bomb.x, bomb.y))
+        world.usedGrid.remove(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         bomb.owner.availableBombs++
         var px = bomb.x
         var py = bomb.y
@@ -74,9 +74,9 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         }
         if (world.players.count {it.alive} == 0) {
             sleep(1000)
-            world.connection.sendMessage("game reload_map ${world.worldId}")
-            sleep(1000)
-            world.connection.sendMessage("game start")
+//            world.connection.sendMessage("game reload_map ${world.worldId}")
+//            sleep(1000)
+//            world.connection.sendMessage("game start")
         }
     }
 }

@@ -4,8 +4,10 @@ import java.net.Socket
 import java.net.ServerSocket
 
 import com.aleexf.logging.Logger
+import com.aleexf.game.world.GameWorld
+import com.aleexf.game.world.WorldUpdater
 
-class Server(val worldId:Int):Thread() {
+open class Server(var worldId:Int):Thread() {
     val connections:MutableList<Connection> = mutableListOf()
     val unusedIds:MutableList<Int> = mutableListOf(0, 1, 2, 3)
     private val port = 8888
@@ -24,6 +26,9 @@ class Server(val worldId:Int):Thread() {
             }
             connections.add(Connection(this, client, clientId))
         }
+    }
+    open fun resendMessage(msg:String) {
+        connections.forEach { it.sendMessage(msg) }
     }
     fun closeConnections() {
         connections.forEach{ it.close() }

@@ -1,8 +1,9 @@
+import com.aleexf.GameServer
 import com.aleexf.logging.Logger
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
+import com.aleexf.game.world.WorldUpdater
 import com.aleexf.net.client.Connection
-import com.aleexf.net.server.Server
 import com.aleexf.gui.MainMenu
 
 
@@ -15,10 +16,11 @@ fun main(args:Array<String>) {
 
     if (menu.IpAddress == "127.0.0.1") {
         try {
-            val server = Server(1)
+            val server = GameServer(1)
             server.start()
         } catch (e: Exception) {
             Logger.error(msg = "[Server]: Server falls down", silent = false)
+            throw e
         }
     }
 
@@ -35,10 +37,15 @@ fun main(args:Array<String>) {
         }
         Logger.info("[Client]: Connected. Nick: ${menu.nick.toString()}")
 
-        val gameWorld = GameWorld(menu.nick!!, connection)
+        val gameWorld = GameWorld(menu.nick!!)
+        connection.sendMessage("get_world_id")
+        gameWorld.worldId = connection.getMessage().toInt()
+        gameWorld.loadWorld(gameWorld.worldId)
+        val gameWorldUpdater = WorldUpdater(gameWorld, connection)
+        gameWorldUpdater.start()
         connection.sendMessage("game init")
         Thread.sleep(100)
-        val drawer = WorldDrawer(gameWorld, connection.localId)
+        val drawer = WorldDrawer(gameWorld, connection.localId, connection)
         drawer.start()
         connection.sendMessage("game start")
 

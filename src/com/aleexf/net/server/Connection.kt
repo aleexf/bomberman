@@ -36,15 +36,16 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
                 "get_world_id" -> this.sendMessage(server.worldId.toString())
                 "game init" -> {
                     server.connections.forEach{
-                        it.sendMessage("player connected ${nick} ${id}")
                         if (it != this) sendMessage("player connected ${it.nick} ${it.id}")
                     }
+                    server.resendMessage("player connected $nick $id")
                 }
                 else -> {
-                    server.connections.forEach{it.sendMessage(message)}
+                    server.resendMessage(message)
                 }
             }
         }
+        this.close()
     }
     fun sendMessage(msg:String) = oStream.println(msg)
     fun close() {
@@ -52,6 +53,8 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         oStream.close()
         socket.close()
         server.connections.remove(this)
+        server.connections.forEach { it.sendMessage("player disconnected $id") }
+        server.resendMessage("player disconnected $id")
         if (id != -1) {
             server.unusedIds.add(id)
         }
