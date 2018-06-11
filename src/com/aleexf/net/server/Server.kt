@@ -4,8 +4,6 @@ import java.net.Socket
 import java.net.ServerSocket
 
 import com.aleexf.logging.Logger
-import com.aleexf.game.world.GameWorld
-import com.aleexf.game.world.WorldUpdater
 
 open class Server(var worldId:Int):Thread() {
     val connections:MutableList<Connection> = mutableListOf()

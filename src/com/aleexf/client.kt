@@ -20,7 +20,7 @@ fun main(args:Array<String>) {
             server.start()
         } catch (e: Exception) {
             Logger.error(msg = "[Server]: Server falls down", silent = false)
-            throw e
+            Logger.error("[Exception]", e.toString())
         }
     }
 
@@ -33,6 +33,7 @@ fun main(args:Array<String>) {
             connection = Connection(menu.nick!!, menu.IpAddress!!)
         } catch (e:Exception) {
             Logger.error(msg = "[Client]: Connection failed", silent = false)
+            Logger.error("[Exception]", e.toString())
             throw e
         }
         Logger.info("[Client]: Connected. Nick: ${menu.nick.toString()}")
@@ -41,18 +42,18 @@ fun main(args:Array<String>) {
         connection.sendMessage("get_world_id")
         gameWorld.worldId = connection.getMessage().toInt()
         gameWorld.loadWorld(gameWorld.worldId)
-        val gameWorldUpdater = WorldUpdater(gameWorld, connection)
+        val gameWorldUpdater = WorldUpdater(gameWorld, connection, null)
         gameWorldUpdater.start()
         connection.sendMessage("game init")
         Thread.sleep(100)
         val drawer = WorldDrawer(gameWorld, connection.localId, connection)
         drawer.start()
-        connection.sendMessage("game start")
 
     } catch(e:Exception) {
         Logger.error("Client fatal error",
                 "Look at logs to get more information",
                 false)
+        Logger.error("[Exception]", e.toString())
 
     }
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics
 import javax.swing.JPanel
 
 import com.aleexf.game.Direction
+import com.aleexf.game.world.cell.*
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.TextureManager
 
@@ -24,33 +25,47 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                 )
             }
         }
-        for (block in world.blocks) {
-            graph.drawImage(TextureManager.iBlock,
-                    block.y*32, block.x*32,
-                    block.y*32+32, block.x*32+32,
-                    0, 0,
-                    64, 64,
-                    null)
-        }
-        for (box in world.boxes) {
-            graph.drawImage(TextureManager.iBox,
-                    box.y*32, box.x*32,
-                    box.y*32+32, box.x*32+32,
-                    0, 0,
-                    64, 64,
-                    null)
-        }
-        for (bomb in world.bombs) {
-            graph.drawImage(when(bomb.delay) {
-                                3000L -> TextureManager.iBomb
-                                else -> TextureManager.iToxicBomb
-                            },
-                    bomb.y*32, bomb.x*32,
-                    bomb.y*32+32, bomb.x*32+32,
-                    0, 0,
-                    60, 60,
-                    null
-            )
+        for (obj in world.objects) {
+            when (obj) {
+                is Block -> {
+                    graph.drawImage(TextureManager.iBlock,
+                            obj.y*32, obj.x*32,
+                            obj.y*32+32, obj.x*32+32,
+                            0, 0,
+                            64, 64,
+                            null)
+                }
+                is Box -> {
+                    graph.drawImage(TextureManager.iBox,
+                            obj.y*32, obj.x*32,
+                            obj.y*32+32, obj.x*32+32,
+                            0, 0,
+                            64, 64,
+                            null)
+                }
+                is Bomb -> {
+                    graph.drawImage(when(obj.delay) {
+                        3000L -> TextureManager.iBomb
+                        else -> TextureManager.iToxicBomb
+                    },
+                            obj.y*32, obj.x*32,
+                            obj.y*32+32, obj.x*32+32,
+                            0, 0,
+                            60, 60,
+                            null
+                    )
+                }
+                is Bonus -> {
+                    graph.drawImage(
+                            TextureManager.iBonus[obj.bType],
+                            obj.y*32, obj.x*32,
+                            obj.y*32+32, obj.x*32+32,
+                            0, 0,
+                            32, 32,
+                            null
+                    )
+                }
+            }
         }
         for (player in world.players) {
             if (!player.alive) continue

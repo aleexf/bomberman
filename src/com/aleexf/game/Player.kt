@@ -2,6 +2,7 @@ package com.aleexf.game
 
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.world.cell.Bomb
+import com.aleexf.game.world.cell.Bonus
 import com.aleexf.game.world.cell.Object
 
 
@@ -16,14 +17,14 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
     var availableBombs = 1
     fun placeBomb():Bomb = Bomb((x+16)/32, (y+16)/32, bombDelay, this, explosionLen)
     fun move(dir:Direction) {
-        val px = this.x + dir.dx * speed
-        val py = this.y + dir.dy * speed
+        val px = this.x + dir.dx * 5
+        val py = this.y + dir.dy * 5
         if (px < 0 || px == world.rows) return
         if (py < 0 || py == world.cols) return
         if (world.anyObject(this.collision, (px+16+dir.dx*16)/32, (py+16+dir.dy*16)/32)) return
         world.usedGrid.remove(Pair(this.collision+1, Pair(this.x, this.y)))
-        this.x = px
-        this.y = py
+        this.x = this.x + dir.dx * speed
+        this.y = this.y + dir.dy * speed
         direction = dir
         animType = (animType+1) % 3
         world.usedGrid.add(Pair(this.collision, Pair(this.x, this.y)))
@@ -36,5 +37,10 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
         animType = 0
         direction = Direction.DOWN
         availableBombs = 1
+    }
+    fun applyBonus(b:Bonus) {
+        speed = Math.min(10, speed+b.speedBoost)
+        explosionLen = Math.min(16, explosionLen+b.explosionLen)
+        availableBombs += b.bombBoost
     }
 }

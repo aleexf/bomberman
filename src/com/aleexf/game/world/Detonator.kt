@@ -1,8 +1,7 @@
 package com.aleexf.game.world
 
 import com.aleexf.game.Player
-import com.aleexf.game.world.cell.Bomb
-import com.aleexf.game.world.cell.Explosion
+import com.aleexf.game.world.cell.*
 
 class Detonator(val world:GameWorld, val player:Player):Thread() {
     override fun run() {
@@ -10,15 +9,15 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         if (world.anyObject(3, (player.x+16)/32, (player.y+16)/32)) return
         val bomb:Bomb = player.placeBomb()
         bomb.owner.availableBombs--
-        world.bombs.add(bomb)
+        world.objects.add(bomb)
         world.usedGrid.add(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         sleep(bomb.delay)
-        if (!world.bombs.contains(bomb)) return
+        if (!world.objects.contains(bomb)) return
         detonate(bomb)
     }
     private fun doExplosion(px:Int, py:Int):Boolean {
-        for (block in world.blocks) {
-            if (block.x == px && block.y == py) {
+        for (block in world.objects) {
+            if (block.x == px && block.y == py && !block.breakByExplosion) {
                 return true
             }
         }
@@ -28,23 +27,19 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
                 player.alive = false
             }
         }
-        for (bomb in world.bombs) {
-            if (bomb.x == px && bomb.y == py) {
-                detonate(bomb)
-            }
-        }
-        for (box in world.boxes) {
-            if (box.x == px && box.y == py) {
-                world.boxes.remove(box)
-                world.usedGrid.remove(Pair(box.collision, Pair(box.x, box.y)))
-                return true
+        world.objects.filter {it.x == px && it.y == py}.forEach {
+            if (it is Bomb) detonate(it)
+            else if (it.breakByExplosion) {
+                world.usedGrid.remove(Pair(it.collision, Pair(it.x, it.y)))
+                world.objects.remove(it)
+                return@doExplosion true
             }
         }
         return false
     }
     private fun detonate(bomb:Bomb) {
-        if (!world.bombs.contains(bomb)) return
-        world.bombs.remove(bomb)
+        if (!world.objects.contains(bomb)) return
+        world.objects.remove(bomb)
         world.usedGrid.remove(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         bomb.owner.availableBombs++
         var px = bomb.x
@@ -72,11 +67,6 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
             --py
             if (doExplosion(px, py)) break
         }
-        if (world.players.count {it.alive} == 0) {
-            sleep(1000)
-//            world.connection.sendMessage("game reload_map ${world.worldId}")
-//            sleep(1000)
-//            world.connection.sendMessage("game start")
-        }
+
     }
 }

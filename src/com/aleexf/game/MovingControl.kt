@@ -4,7 +4,6 @@ import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
 import com.aleexf.net.client.Connection
-import com.aleexf.game.drawer.WorldDrawer
 
 class MovingControl(val connection:Connection, val player:Player):Thread() {
     init {

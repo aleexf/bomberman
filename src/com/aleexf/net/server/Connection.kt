@@ -29,6 +29,7 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         }
     }
     override fun run() {
+        sleep(100)
         while (!socket.isClosed) {
             val message = iStream.readLine()
             when (message) {
@@ -53,7 +54,6 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         oStream.close()
         socket.close()
         server.connections.remove(this)
-        server.connections.forEach { it.sendMessage("player disconnected $id") }
         server.resendMessage("player disconnected $id")
         if (id != -1) {
             server.unusedIds.add(id)

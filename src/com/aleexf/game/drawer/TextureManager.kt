@@ -15,12 +15,18 @@ object TextureManager {
     val iToxicBomb: Image
     val iPlayer: List<List<Image>>
     val iExplosion: List<Image>
+    val iBonus: List<Image>
     init {
         iBlock = loadTexture("./data/texture/block.png")
         iBox = loadTexture("./data/texture/box.png")
         iFloor = loadTexture("./data/texture/floor.png")
         iBomb = loadTexture("./data/texture/bomb.png")
         iToxicBomb = loadTexture("./data/texture/toxic_bomb.png")
+        iBonus = listOf(
+                loadTexture("./data/texture/bonus/speed.png"),
+                loadTexture("./data/texture/bonus/explosion.png"),
+                loadTexture("./data/texture/bonus/bomb.png")
+                )
         iPlayer = List(4) {playerId:Int ->
             List(12) {
                 var path = "./data/texture/player/${playerId+1}/"
