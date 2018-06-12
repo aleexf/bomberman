@@ -55,7 +55,6 @@ class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpd
                         val py = msg[3].toInt()
                         val bType = msg[4].toInt()
                         world.objects.add(Bonus(px, py, bType))
-                        world.usedGrid.add(Pair(1, Pair(px, py)))
                     }
                     "picked_bonus" -> {
                         val playerId = msg[2].toInt()
@@ -64,14 +63,7 @@ class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpd
                         world.findPlayerById(playerId).applyBonus(
                                 world.objects.first { it is Bonus && it.x == px && it.y == py } as Bonus
                         )
-                        world.objects.removeIf{
-                            if (it is Bonus && it.x == px && it.y == py) {
-                                world.usedGrid.remove(Pair(it.collision, Pair(it.x, it.y)))
-                                true
-                            } else {
-                                false
-                            }
-                        }
+                        world.objects.removeIf{ it is Bonus && it.x == px && it.y == py  }
                     }
                 }
             }

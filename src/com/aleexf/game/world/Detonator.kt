@@ -10,7 +10,6 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         val bomb:Bomb = player.placeBomb()
         bomb.owner.availableBombs--
         world.objects.add(bomb)
-        world.usedGrid.add(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         sleep(bomb.delay)
         if (!world.objects.contains(bomb)) return
         detonate(bomb)
@@ -30,7 +29,6 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         world.objects.filter {it.x == px && it.y == py}.forEach {
             if (it is Bomb) detonate(it)
             else if (it.breakByExplosion) {
-                world.usedGrid.remove(Pair(it.collision, Pair(it.x, it.y)))
                 world.objects.remove(it)
                 return@doExplosion true
             }
@@ -40,7 +38,6 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
     private fun detonate(bomb:Bomb) {
         if (!world.objects.contains(bomb)) return
         world.objects.remove(bomb)
-        world.usedGrid.remove(Pair(bomb.collision, Pair(bomb.x, bomb.y)))
         bomb.owner.availableBombs++
         var px = bomb.x
         var py = bomb.y

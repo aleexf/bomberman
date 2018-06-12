@@ -21,13 +21,11 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
         val py = this.y + dir.dy * 5
         if (px < 0 || px == world.rows) return
         if (py < 0 || py == world.cols) return
-        if (world.anyObject(this.collision, (px+16+dir.dx*16)/32, (py+16+dir.dy*16)/32)) return
-        world.usedGrid.remove(Pair(this.collision+1, Pair(this.x, this.y)))
+        if (world.anyObject(this.collision+1, (px+16+dir.dx*16)/32, (py+16+dir.dy*16)/32)) return
         this.x = this.x + dir.dx * speed
         this.y = this.y + dir.dy * speed
         direction = dir
         animType = (animType+1) % 3
-        world.usedGrid.add(Pair(this.collision, Pair(this.x, this.y)))
     }
     fun defaultParams() {
         alive = false

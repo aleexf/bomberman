@@ -13,6 +13,7 @@ object TextureManager {
     val iFloor: Image
     val iBomb: Image
     val iToxicBomb: Image
+    val iHeavyBox: Image
     val iPlayer: List<List<Image>>
     val iExplosion: List<Image>
     val iBonus: List<Image>
@@ -22,6 +23,7 @@ object TextureManager {
         iFloor = loadTexture("./data/texture/floor.png")
         iBomb = loadTexture("./data/texture/bomb.png")
         iToxicBomb = loadTexture("./data/texture/toxic_bomb.png")
+        iHeavyBox = loadTexture("./data/texture/heavy_box.png")
         iBonus = listOf(
                 loadTexture("./data/texture/bonus/speed.png"),
                 loadTexture("./data/texture/bonus/explosion.png"),

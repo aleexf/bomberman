@@ -25,7 +25,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                 )
             }
         }
-        for (obj in world.objects) {
+        for (obj in world.objects.asReversed()) {
             when (obj) {
                 is Block -> {
                     graph.drawImage(TextureManager.iBlock,
@@ -62,6 +62,16 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                             obj.y*32+32, obj.x*32+32,
                             0, 0,
                             32, 32,
+                            null
+                    )
+                }
+                is HeavyBox -> {
+                    graph.drawImage(
+                            TextureManager.iHeavyBox,
+                            obj.y*32, obj.x*32,
+                            obj.y*32+32, obj.x*32+32,
+                            0, 0,
+                            64, 64,
                             null
                     )
                 }
