@@ -23,7 +23,7 @@ class GameWorld(val nick:String) {
     }
     fun anyObject(collision: Int, x: Int, y: Int): Boolean {
         return objects.filter{it.collision >= collision}.any{Pair(it.x, it.y) == Pair(x, y)}
-            || players.filter{it.collision >= collision}.any{Pair(it.x, it.y) == Pair(x, y)}
+            || players.filter{it.collision >= collision && it.alive}.any{Pair(it.x, it.y) == Pair(x, y)}
     }
     fun loadWorld(worldId:Int) {
         objects.clear();
@@ -42,7 +42,7 @@ class GameWorld(val nick:String) {
                         objects.add(Box(i, j))
                     }
                     else -> {
-                        spawnCrd[row[j].toInt() - 48] = listOf(i * 32, j * 32)
+                        spawnCrd[row[j].toInt() - 48] = listOf(i * 32 + 16, j * 32 + 16)
                     }
                 }
             }

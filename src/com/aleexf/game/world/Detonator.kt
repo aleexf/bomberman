@@ -6,7 +6,7 @@ import com.aleexf.game.world.cell.*
 class Detonator(val world:GameWorld, val player:Player):Thread() {
     override fun run() {
         if (player.availableBombs == 0) return
-        if (world.anyObject(3, (player.x+16)/32, (player.y+16)/32)) return
+        if (world.anyObject(2, player.x/32, player.y/32)) return
         val bomb:Bomb = player.placeBomb()
         bomb.owner.availableBombs--
         world.objects.add(bomb)
@@ -22,7 +22,7 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         }
         world.explosion.add(Explosion(px, py))
         for (player in world.players) {
-            if ((player.x+16)/32 == px && (player.y+16)/32 == py) {
+            if (player.x/32 == px && player.y/32 == py) {
                 player.alive = false
             }
         }

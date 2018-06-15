@@ -15,13 +15,25 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
     var animType = 0
     var direction:Direction = Direction.DOWN
     var availableBombs = 1
-    fun placeBomb():Bomb = Bomb((x+16)/32, (y+16)/32, bombDelay, this, explosionLen)
+    var canPushBomb = false
+    fun placeBomb():Bomb = Bomb(x/32, y/32, bombDelay, this, explosionLen)
     fun move(dir:Direction) {
         val px = this.x + dir.dx * 5
         val py = this.y + dir.dy * 5
         if (px < 0 || px == world.rows) return
         if (py < 0 || py == world.cols) return
-        if (world.anyObject(this.collision+1, (px+16+dir.dx*16)/32, (py+16+dir.dy*16)/32)) return
+        if (canPushBomb) {
+            val bx = x/32 + dir.dx
+            val by = y/32 + dir.dy
+            world.objects
+                    .filter { it is Bomb && it.collision == 3 && it.x == bx && it.y == by }
+                    .forEach {
+                        it as Bomb
+                        it.speedX = dir.dx
+                        it.speedY = dir.dy
+                    }
+        }
+        if (world.anyObject(this.collision+1, (px+dir.dx*16)/32, (py+dir.dy*16)/32)) return
         this.x = this.x + dir.dx * speed
         this.y = this.y + dir.dy * speed
         direction = dir
@@ -35,10 +47,12 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
         animType = 0
         direction = Direction.DOWN
         availableBombs = 1
+        canPushBomb = false
     }
     fun applyBonus(b:Bonus) {
         speed = Math.min(10, speed+b.speedBoost)
         explosionLen = Math.min(16, explosionLen+b.explosionLen)
         availableBombs += b.bombBoost
+        canPushBomb = canPushBomb || b.canPushBomb
     }
 }

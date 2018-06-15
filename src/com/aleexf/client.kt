@@ -2,6 +2,7 @@ import com.aleexf.GameServer
 import com.aleexf.logging.Logger
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
+import com.aleexf.game.world.ObjectMover
 import com.aleexf.game.world.WorldUpdater
 import com.aleexf.net.client.Connection
 import com.aleexf.gui.MainMenu
@@ -43,7 +44,10 @@ fun main(args:Array<String>) {
         gameWorld.worldId = connection.getMessage().toInt()
         gameWorld.loadWorld(gameWorld.worldId)
         val gameWorldUpdater = WorldUpdater(gameWorld, connection, null)
+        val objectMover = ObjectMover(gameWorld)
         gameWorldUpdater.start()
+        objectMover.start()
+
         connection.sendMessage("game init")
         Thread.sleep(100)
         val drawer = WorldDrawer(gameWorld, connection.localId, connection)

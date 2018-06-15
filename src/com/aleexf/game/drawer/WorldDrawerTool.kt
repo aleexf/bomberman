@@ -48,10 +48,10 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                         3000L -> TextureManager.iBomb
                         else -> TextureManager.iToxicBomb
                     },
-                            obj.y*32, obj.x*32,
-                            obj.y*32+32, obj.x*32+32,
+                            obj.realY-12, obj.realX-12,
+                            obj.realY+12, obj.realX+12,
                             0, 0,
-                            60, 60,
+                            50, 50,
                             null
                     )
                 }
@@ -86,8 +86,8 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                 Direction.RIGHT -> 9
             }
             graph.drawImage(TextureManager.iPlayer[player.playerId][imgId+player.animType],
-                    player.y, player.x,
-                    player.y+32, player.x+32,
+                    player.y-16, player.x-16,
+                    player.y+16, player.x+16,
                     0, 0,
                     64, 64,
                     null

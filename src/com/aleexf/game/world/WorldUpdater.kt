@@ -2,6 +2,7 @@ package com.aleexf.game.world
 
 import com.aleexf.game.Player
 import com.aleexf.game.Direction
+import com.aleexf.game.world.cell.Bomb
 import com.aleexf.game.world.cell.Bonus
 import com.aleexf.net.client.Connection
 
@@ -64,6 +65,12 @@ class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpd
                                 world.objects.first { it is Bonus && it.x == px && it.y == py } as Bonus
                         )
                         world.objects.removeIf{ it is Bonus && it.x == px && it.y == py  }
+                    }
+                    "change_collision" -> {
+                        val px = msg[2].toInt()
+                        val py = msg[3].toInt()
+                        world.objects.find { it is Bomb && it.collision == 2 && it.x == px && it.y ==  py }
+                                ?.collision = 3
                     }
                 }
             }

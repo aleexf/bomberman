@@ -26,8 +26,9 @@ object TextureManager {
         iHeavyBox = loadTexture("./data/texture/heavy_box.png")
         iBonus = listOf(
                 loadTexture("./data/texture/bonus/speed.png"),
+                loadTexture("./data/texture/bonus/bomb.png"),
                 loadTexture("./data/texture/bonus/explosion.png"),
-                loadTexture("./data/texture/bonus/bomb.png")
+                loadTexture("./data/texture/bonus/bombpush.png")
                 )
         iPlayer = List(4) {playerId:Int ->
             List(12) {
