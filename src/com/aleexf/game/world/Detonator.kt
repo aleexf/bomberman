@@ -2,6 +2,8 @@ package com.aleexf.game.world
 
 import com.aleexf.game.Player
 import com.aleexf.game.world.cell.*
+import com.aleexf.game.sound.Sounds
+import com.aleexf.game.sound.Player.playSound
 
 class Detonator(val world:GameWorld, val player:Player):Thread() {
     override fun run() {
@@ -37,6 +39,7 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
     }
     private fun detonate(bomb:Bomb) {
         if (!world.objects.contains(bomb)) return
+        if (!world.onServer()) playSound(Sounds.EXPLOSION)
         world.objects.remove(bomb)
         bomb.owner.availableBombs++
         var px = bomb.x

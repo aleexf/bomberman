@@ -4,6 +4,8 @@ import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
 import com.aleexf.game.world.ObjectMover
 import com.aleexf.game.world.WorldUpdater
+import com.aleexf.game.sound.Sounds
+import com.aleexf.game.sound.Player
 import com.aleexf.net.client.Connection
 import com.aleexf.gui.MainMenu
 
@@ -47,6 +49,8 @@ fun main(args:Array<String>) {
         val objectMover = ObjectMover(gameWorld)
         gameWorldUpdater.start()
         objectMover.start()
+
+        Player.playSound(Sounds.BACKGROUND1.randomBackground(), loop = true)
 
         connection.sendMessage("game init")
         Thread.sleep(100)

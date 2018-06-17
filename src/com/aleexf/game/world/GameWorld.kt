@@ -48,5 +48,6 @@ class GameWorld(val nick:String) {
             }
         }
     }
+    fun onServer() = nick == "server"
 }
 

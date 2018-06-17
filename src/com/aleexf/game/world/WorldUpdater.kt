@@ -4,6 +4,8 @@ import com.aleexf.game.Player
 import com.aleexf.game.Direction
 import com.aleexf.game.world.cell.Bomb
 import com.aleexf.game.world.cell.Bonus
+import com.aleexf.game.sound.Sounds
+import com.aleexf.game.sound.Player.playSound
 import com.aleexf.net.client.Connection
 
 class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpdater: HostWorldControl?):Thread() {
@@ -59,6 +61,9 @@ class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpd
                     }
                     "picked_bonus" -> {
                         val playerId = msg[2].toInt()
+                        if (playerId == connection?.localId) {
+                            playSound(Sounds.PICKUP)
+                        }
                         val px = msg[3].toInt()
                         val py = msg[4].toInt()
                         world.findPlayerById(playerId).applyBonus(
