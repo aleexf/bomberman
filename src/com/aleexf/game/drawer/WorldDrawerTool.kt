@@ -1,5 +1,6 @@
 package com.aleexf.game.drawer
 
+import java.lang.Math.min
 import java.awt.Graphics
 import javax.swing.JPanel
 
@@ -57,7 +58,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                 }
                 is Bonus -> {
                     graph.drawImage(
-                            TextureManager.iBonus[obj.bType],
+                            TextureManager.iBonus[min(4, obj.bType)],
                             obj.y*32, obj.x*32,
                             obj.y*32+32, obj.x*32+32,
                             0, 0,

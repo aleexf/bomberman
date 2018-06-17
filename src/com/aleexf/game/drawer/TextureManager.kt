@@ -28,7 +28,8 @@ object TextureManager {
                 loadTexture("./data/texture/bonus/speed.png"),
                 loadTexture("./data/texture/bonus/bomb.png"),
                 loadTexture("./data/texture/bonus/explosion.png"),
-                loadTexture("./data/texture/bonus/bombpush.png")
+                loadTexture("./data/texture/bonus/bombpush.png"),
+                loadTexture("./data/texture/bonus/skull.png")
                 )
         iPlayer = List(4) {playerId:Int ->
             List(12) {

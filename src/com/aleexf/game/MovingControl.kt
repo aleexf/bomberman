@@ -14,13 +14,17 @@ class MovingControl(val connection:Connection, val player:Player):Thread() {
             sleep(50)
             if (!player.alive) continue
             if (KeyboardControl.isKeyPressed(KeyEvent.VK_UP)) {
-                connection.sendMessage("action move ${player.playerId} UP")
+                if (!player.shuffledKeyboard) connection.sendMessage("action move ${player.playerId} UP")
+                else connection.sendMessage("action move ${player.playerId} DOWN")
             } else if (KeyboardControl.isKeyPressed(KeyEvent.VK_DOWN)) {
-                connection.sendMessage("action move ${player.playerId} DOWN")
+                if (!player.shuffledKeyboard) connection.sendMessage("action move ${player.playerId} DOWN")
+                else connection.sendMessage("action move ${player.playerId} RIGHT")
             } else if (KeyboardControl.isKeyPressed(KeyEvent.VK_LEFT)) {
-                connection.sendMessage("action move ${player.playerId} LEFT")
+                if (!player.shuffledKeyboard) connection.sendMessage("action move ${player.playerId} LEFT")
+                else connection.sendMessage("action move ${player.playerId} UP")
             } else if (KeyboardControl.isKeyPressed(KeyEvent.VK_RIGHT)) {
-                connection.sendMessage("action move ${player.playerId} RIGHT")
+                if (!player.shuffledKeyboard) connection.sendMessage("action move ${player.playerId} RIGHT")
+                else connection.sendMessage("action move ${player.playerId} LEFT")
             }
             if (KeyboardControl.isKeyPressed(KeyEvent.VK_SPACE)) {
                 connection.sendMessage("action place_bomb ${player.playerId}")

@@ -16,6 +16,7 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
     var direction:Direction = Direction.DOWN
     var availableBombs = 1
     var canPushBomb = false
+    var shuffledKeyboard = false
     fun placeBomb():Bomb = Bomb(x/32, y/32, bombDelay, this, explosionLen)
     fun move(dir:Direction) {
         val px = this.x + dir.dx * 5
@@ -48,11 +49,31 @@ class Player(x:Int, y:Int, val name:String, val playerId:Int, val world:GameWorl
         direction = Direction.DOWN
         availableBombs = 1
         canPushBomb = false
+        shuffledKeyboard = false
     }
     fun applyBonus(b:Bonus) {
-        speed = Math.min(10, speed+b.speedBoost)
-        explosionLen = Math.min(16, explosionLen+b.explosionLen)
-        availableBombs += b.bombBoost
-        canPushBomb = canPushBomb || b.canPushBomb
+        if (b.bType > 3) {
+            val oldSpeed = speed
+            speed = if (b.speedBoost != 0) b.speedBoost else speed
+            bombDelay = if (b.delayBoost != 0) b.delayBoost.toLong() else bombDelay
+            shuffledKeyboard = shuffledKeyboard || b.shuffleKeys
+            object : Thread() {
+                init {
+                    isDaemon = true
+                    this.start()
+                }
+                override fun run() {
+                    sleep(15 * 1000)
+                    speed = oldSpeed
+                    bombDelay = 3000
+                    shuffledKeyboard = false
+                }
+            }
+        } else {
+            speed = Math.min(10, speed + b.speedBoost)
+            explosionLen = Math.min(16, explosionLen + b.explosionLen)
+            availableBombs += b.bombBoost
+            canPushBomb = canPushBomb || b.canPushBomb
+        }
     }
 }

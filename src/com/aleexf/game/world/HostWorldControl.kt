@@ -9,6 +9,7 @@ import com.aleexf.game.world.cell.Object
 
 class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit): Thread() {
     private val BONUS_COUNT = 15
+    private val BAD_BONUS_COUNT = 5
     private val rnd = Random()
     private val bonuses: MutableList<Bonus> = mutableListOf()
     init {
@@ -34,12 +35,14 @@ class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit
                     sender("action picked_bonus ${player.playerId} ${bonus.x} ${bonus.y}")
                 }
             }
+            val send = mutableListOf<String>()
             gameWorld.objects.filter { it is Bomb && it.collision == 2 }.forEach { bomb: Object -> Unit
                 if (gameWorld.players.none {it.alive && it.x/32 == bomb.x && it.y/32 == bomb.y}) {
-                    sender("action change_collision ${bomb.x} ${bomb.y}")
+                    send.add("action change_collision ${bomb.x} ${bomb.y}")
                 }
             }
-            if (!gameWorld.players.isEmpty() && (gameWorld.players.count{ it.alive } <= 1 && gameWorld.players.size > 1
+            for (msg in send) sender(msg)
+            if (!gameWorld.players.isEmpty() && ((gameWorld.players.count{ it.alive } <= 1 && gameWorld.players.size > 1)
                     || gameWorld.players.count{ it.alive } == 0)) {
                 sender("game reload_map ${gameWorld.worldId}")
                 sleep(500)
@@ -54,6 +57,13 @@ class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit
         for (i in 1..BONUS_COUNT) {
             if (boxes.isEmpty()) break
             val bType = rnd.nextInt(4)
+            val cIndex = rnd.nextInt(boxes.size)
+            bonuses.add(Bonus(boxes[cIndex].x, boxes[cIndex].y, bType))
+            boxes.removeAt(cIndex)
+        }
+        for (i in 1..BAD_BONUS_COUNT) {
+            if (boxes.isEmpty()) break
+            val bType = 4 + rnd.nextInt(5)
             val cIndex = rnd.nextInt(boxes.size)
             bonuses.add(Bonus(boxes[cIndex].x, boxes[cIndex].y, bType))
             boxes.removeAt(cIndex)
