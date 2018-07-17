@@ -5,8 +5,7 @@ import javax.swing.JFrame
 import com.aleexf.game.MovingControl
 import com.aleexf.game.KeyboardControl
 import com.aleexf.game.world.GameWorld
-import com.aleexf.game.drawer.WorldDrawerTool
-import com.aleexf.game.world.ExplosionAnimator
+import com.aleexf.game.world.Animator
 import com.aleexf.net.client.Connection
 
 
@@ -15,11 +14,11 @@ class WorldDrawer(var world: GameWorld, val localID:Int, val connection:Connecti
     private val delay:Long
     private val painter:WorldDrawerTool
     private val movingControl:MovingControl
-    private val explosionAnimator:ExplosionAnimator
+    private val explosionAnimator:Animator
     init {
         painter = WorldDrawerTool(world)
         movingControl = MovingControl(connection, world.findPlayerById(localID))
-        explosionAnimator = ExplosionAnimator(world)
+        explosionAnimator = Animator(world)
 
         isDaemon = true
         frame = JFrame("Bomberman")

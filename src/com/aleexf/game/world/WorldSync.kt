@@ -8,7 +8,7 @@ import com.aleexf.game.sound.Sounds
 import com.aleexf.game.sound.Player.playSound
 import com.aleexf.net.client.Connection
 
-class WorldUpdater(val world:GameWorld, val connection: Connection?, val hostUpdater: HostWorldControl?):Thread() {
+class WorldSync(val world:GameWorld, val connection: Connection?, private val hostUpdater: HostWorldControl?):Thread() {
     override fun run() {
         while (true) {
             this.updateWorld(connection!!.getMessage())

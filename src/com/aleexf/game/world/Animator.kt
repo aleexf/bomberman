@@ -3,7 +3,7 @@ package com.aleexf.game.world
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.world.cell.Explosion
 
-class ExplosionAnimator(val world:GameWorld):Thread() {
+class Animator(val world:GameWorld):Thread() {
     init {
         isDaemon = true
     }

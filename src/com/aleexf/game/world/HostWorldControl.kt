@@ -13,6 +13,8 @@ class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit
     private val rnd = Random()
     private val bonuses: MutableList<Bonus> = mutableListOf()
     init {
+        isDaemon = true
+
         generateBonuses()
         this.start()
     }

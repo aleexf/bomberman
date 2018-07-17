@@ -94,7 +94,7 @@ class WorldDrawerTool(var world: GameWorld) : JPanel() {
                     null
             )
         }
-        for (explosion in world.explosion) {
+        for (explosion in world.explosion.toTypedArray()) {
             graph.drawImage(TextureManager.iExplosion[explosion.animType],
                     explosion.y*32, explosion.x*32,
                     explosion.y*32+32, explosion.x*32+32,

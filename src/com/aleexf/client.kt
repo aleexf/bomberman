@@ -3,12 +3,11 @@ import com.aleexf.logging.Logger
 import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
 import com.aleexf.game.world.ObjectMover
-import com.aleexf.game.world.WorldUpdater
+import com.aleexf.game.world.WorldSync
 import com.aleexf.game.sound.Sounds
 import com.aleexf.game.sound.Player
 import com.aleexf.net.client.Connection
 import com.aleexf.gui.MainMenu
-
 
 fun main(args:Array<String>) {
     val menu = MainMenu()
@@ -45,9 +44,9 @@ fun main(args:Array<String>) {
         connection.sendMessage("get_world_id")
         gameWorld.worldId = connection.getMessage().toInt()
         gameWorld.loadWorld(gameWorld.worldId)
-        val gameWorldUpdater = WorldUpdater(gameWorld, connection, null)
+        val worldSynchronizer = WorldSync(gameWorld, connection, null)
         val objectMover = ObjectMover(gameWorld)
-        gameWorldUpdater.start()
+        worldSynchronizer.start()
         objectMover.start()
 
         Player.playSound(Sounds.BACKGROUND1.randomBackground(), loop = true)
