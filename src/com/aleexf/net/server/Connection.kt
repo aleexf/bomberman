@@ -6,11 +6,13 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 
 import com.aleexf.logging.Logger
+import com.aleexf.logging.LoggingFactories
 
-class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
-    val nick:String
-    private val iStream:BufferedReader
-    private val oStream:PrintWriter
+class Connection(val server: Server, val socket: Socket, val id: Int) : Thread() {
+    private val nick: String
+    private val iStream: BufferedReader
+    private val oStream: PrintWriter
+    private val logger by lazy { LoggingFactories.serverFactory.getLogger(this.javaClass.name) }
     init {
         iStream = BufferedReader(InputStreamReader(socket.getInputStream()))
         oStream = PrintWriter(socket.getOutputStream(), true)
@@ -19,7 +21,7 @@ class Connection(val server:Server, val socket:Socket, val id:Int):Thread() {
         } else {
             nick = "noname"
         }
-        Logger.info("[Server]: $nick connected with id $id")
+        logger.info("$nick connected with id $id")
         if (id == -1) {
             this.sendMessage("Server is full")
             this.close()

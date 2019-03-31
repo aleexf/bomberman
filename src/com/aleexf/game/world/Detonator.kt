@@ -5,7 +5,7 @@ import com.aleexf.game.world.cell.*
 import com.aleexf.game.sound.Sounds
 import com.aleexf.game.sound.Player.playSound
 
-class Detonator(val world:GameWorld, val player:Player):Thread() {
+class Detonator(val world: GameWorld, val player: Player): Thread() {
     override fun run() {
         if (player.availableBombs == 0) return
         if (world.anyObject(2, player.x/32, player.y/32)) return
@@ -16,7 +16,7 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         if (!world.objects.contains(bomb)) return
         detonate(bomb)
     }
-    private fun doExplosion(px:Int, py:Int):Boolean {
+    private fun doExplosion(px:Int, py:Int): Boolean {
         for (block in world.objects) {
             if (block.x == px && block.y == py && !block.breakByExplosion) {
                 return true
@@ -37,9 +37,9 @@ class Detonator(val world:GameWorld, val player:Player):Thread() {
         }
         return false
     }
-    private fun detonate(bomb:Bomb) {
+    private fun detonate(bomb: Bomb) {
         if (!world.objects.contains(bomb)) return
-        if (!world.onServer()) playSound(Sounds.EXPLOSION)
+        if (!world.onServer) playSound(Sounds.EXPLOSION)
         world.objects.remove(bomb)
         bomb.owner.availableBombs++
         var px = bomb.x

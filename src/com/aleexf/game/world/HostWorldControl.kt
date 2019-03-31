@@ -2,15 +2,16 @@ package com.aleexf.game.world
 
 import java.util.Random
 
+import com.aleexf.config.Config
 import com.aleexf.game.world.cell.Box
 import com.aleexf.game.world.cell.Bomb
 import com.aleexf.game.world.cell.Bonus
 import com.aleexf.game.world.cell.Object
 
-class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit): Thread() {
-    private val BONUS_COUNT = 15
-    private val BAD_BONUS_COUNT = 5
-    private val rnd = Random()
+class HostWorldControl(val gameWorld: GameWorld, val sender: (msg:String) -> Unit): Thread() {
+    private val BONUS_COUNT = Config.MapTotalBonusCount
+    private val BAD_BONUS_COUNT = Config.MapBadBonusCount
+    private val random = Random()
     private val bonuses: MutableList<Bonus> = mutableListOf()
     init {
         isDaemon = true
@@ -43,6 +44,7 @@ class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit
                     send.add("action change_collision ${bomb.x} ${bomb.y}")
                 }
             }
+            //! TODO: Teleport condition here
             for (msg in send) sender(msg)
             if (!gameWorld.players.isEmpty() && ((gameWorld.players.count{ it.alive } <= 1 && gameWorld.players.size > 1)
                     || gameWorld.players.count{ it.alive } == 0)) {
@@ -58,15 +60,15 @@ class HostWorldControl(val gameWorld: GameWorld, val sender:(msg:String) -> Unit
         val boxes:MutableList<Object> = gameWorld.objects.filter{ it is Box }.toMutableList()
         for (i in 1..BONUS_COUNT) {
             if (boxes.isEmpty()) break
-            val bType = rnd.nextInt(4)
-            val cIndex = rnd.nextInt(boxes.size)
+            val bType = random.nextInt(4)
+            val cIndex = random.nextInt(boxes.size)
             bonuses.add(Bonus(boxes[cIndex].x, boxes[cIndex].y, bType))
             boxes.removeAt(cIndex)
         }
         for (i in 1..BAD_BONUS_COUNT) {
             if (boxes.isEmpty()) break
-            val bType = 4 + rnd.nextInt(5)
-            val cIndex = rnd.nextInt(boxes.size)
+            val bType = 4 + random.nextInt(5)
+            val cIndex = random.nextInt(boxes.size)
             bonuses.add(Bonus(boxes[cIndex].x, boxes[cIndex].y, bType))
             boxes.removeAt(cIndex)
         }

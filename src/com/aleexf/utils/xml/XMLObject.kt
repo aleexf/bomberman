@@ -56,4 +56,5 @@ class XMLObject() {
         }
         return objects.toTypedArray()
     }
+    fun containsTag(tagName: String) = children.any { it.first == tagName }
 }

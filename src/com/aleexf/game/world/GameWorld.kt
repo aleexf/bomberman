@@ -1,27 +1,29 @@
 package com.aleexf.game.world
 
+import com.aleexf.config.Config
 import com.aleexf.game.Player
 import com.aleexf.game.world.cell.*
 
-
-class GameWorld(val nick:String) {
-    val rows:Int = 15
-    val cols:Int = 15
-    var worldId:Int = 0
+class GameWorld(val nick: String, val onServer: Boolean) {
+    val rows = Config.GameFieldRows
+    val cols = Config.GameFieldCols
+    var worldId = 0
     val spawnCrd: MutableMap<Int, List<Int>> = mutableMapOf()
     val objects: MutableList<Object> = mutableListOf()
     val explosion: MutableList<Explosion> = mutableListOf()
     val players: MutableList<Player> = mutableListOf()
-    fun findPlayerById(playerId: Int):Player {
-        if (players.count{it.playerId == playerId} == 0)
-            throw NullPointerException("Player not found")
-        return players.first {it.playerId == playerId}
+    val worldLoader = WorldLoader(this)
+
+    fun findPlayerById(playerId: Int): Player {
+        return players.firstOrNull { it.playerId == playerId }
+                ?: throw java.lang.NullPointerException("Player not found")
     }
     fun anyObject(collision: Int, x: Int, y: Int): Boolean {
-        return objects.filter{it.collision >= collision}.any{Pair(it.x, it.y) == Pair(x, y)}
-            || players.filter{it.collision >= collision && it.alive}.any{Pair(it.x, it.y) == Pair(x, y)}
+        return objects.filter { it.collision >= collision }
+                      .any { it.x == x && it.y == y }
+            || players.filter { it.collision >= collision && it.alive }
+                      .any { it.x == x && it.y == y }
     }
-    fun loadWorld(worldId:Int) = loadWorld(worldId, this)
-    fun onServer() = nick == "server"
+    fun loadWorld(worldId:Int) = worldLoader.loadWorld(worldId)
 }
 

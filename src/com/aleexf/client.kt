@@ -12,8 +12,7 @@ import com.aleexf.gui.MainMenu
 fun main(args:Array<String>) {
     val menu = MainMenu()
     menu.join()
-    Logger.info("[GUI]: Ip address: ${menu.IpAddress.toString()}")
-    Logger.info("[GUI]: Nick: ${menu.nick.toString()}")
+
     menu.IpAddress = menu.IpAddress?.split('.')?.map{it.toInt().toString()}?.joinToString(separator = ".")
 
     if (menu.IpAddress == "127.0.0.1") {

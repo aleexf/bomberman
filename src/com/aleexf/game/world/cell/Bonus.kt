@@ -1,12 +1,24 @@
 package com.aleexf.game.world.cell
 
-class Bonus(x:Int, y:Int, val bType:Int): Object(x, y, true, 1) {
+import java.awt.Image
+
+import com.aleexf.graphics.drawer.TextureManager
+
+class Bonus(x: Int, y: Int, val bType: Int) : Object(x, y, true, 1) {
+    override var tSizeX: Int = 32
+    override var tSizeY: Int = 32
+    override var rSizeX: Int = 32
+    override var rSizeY: Int = 32
+    override val priority: Int = 0
+    override var texture: Image = TextureManager.iBonus[Math.min(4, bType)]
+
     var speedBoost: Int = 0
     var bombBoost: Int = 0
     var explosionLen: Int = 0
     var delayBoost = 0
     var shuffleKeys = false
     var canPushBomb: Boolean = false
+
     init {
         when (bType) {
             0 -> speedBoost = 2

@@ -4,17 +4,22 @@ import com.aleexf.game.Player
 import com.aleexf.game.Direction
 import com.aleexf.game.world.cell.Bomb
 import com.aleexf.game.world.cell.Bonus
+import com.aleexf.game.world.cell.Teleport
 import com.aleexf.game.sound.Sounds
 import com.aleexf.game.sound.Player.playSound
 import com.aleexf.net.client.Connection
 
-class WorldSync(val world:GameWorld, val connection: Connection?, private val hostUpdater: HostWorldControl?):Thread() {
+class WorldSync(
+        val world:GameWorld,
+        val connection: Connection?,
+        private val hostUpdater: HostWorldControl?
+) : Thread() {
     override fun run() {
         while (true) {
             this.updateWorld(connection!!.getMessage())
         }
     }
-    fun updateWorld(message:String) {
+    fun updateWorld(message: String) {
         val msg = message.split(' ')
         when (msg[0]) {
             "player" -> {
@@ -34,7 +39,7 @@ class WorldSync(val world:GameWorld, val connection: Connection?, private val ho
                     }
                     "start" -> {
                         for (player in world.players) {
-                            player.defaultParams()
+                            player.resetStats()
                             player.alive = true
                             player.x = world.spawnCrd[player.playerId]?.get(0) ?: -1
                             player.y = world.spawnCrd[player.playerId]?.get(0) ?: -1
@@ -69,13 +74,23 @@ class WorldSync(val world:GameWorld, val connection: Connection?, private val ho
                         world.findPlayerById(playerId).applyBonus(
                                 world.objects.first { it is Bonus && it.x == px && it.y == py } as Bonus
                         )
-                        world.objects.removeIf{ it is Bonus && it.x == px && it.y == py  }
+                        world.objects.removeIf { it is Bonus && it.x == px && it.y == py  }
                     }
                     "change_collision" -> {
                         val px = msg[2].toInt()
                         val py = msg[3].toInt()
                         world.objects.find { it is Bomb && it.collision == 2 && it.x == px && it.y ==  py }
-                                ?.collision = 3
+                                     ?.collision = 3
+                    }
+                    "teleport" -> {
+                        val player = world.findPlayerById(msg[2].toInt())
+                        val tpx = msg[3].toInt()
+                        val tpy = msg[4].toInt()
+                        val otherTeleport = (world.objects
+                                .first {it is Teleport && it.x == tpx && it.y == tpy} as Teleport)
+                                .other!!
+                        player.x = otherTeleport.x * 32 + 16
+                        player.y = otherTeleport.y * 32 + 16
                     }
                 }
             }

@@ -6,8 +6,8 @@ import com.aleexf.game.world.WorldSync
 import com.aleexf.game.world.HostWorldControl
 import com.aleexf.net.server.Server
 
-class GameServer(worldId:Int): Server(worldId) {
-    private val gameWorld = GameWorld("server")
+class GameServer(worldId: Int) : Server(worldId) {
+    private val gameWorld = GameWorld("server", true)
     private val hostWorldControl = HostWorldControl(gameWorld, this::resendMessage)
     private val worldSynchronizer = WorldSync(gameWorld, null, hostWorldControl)
     private val objectMover = ObjectMover(gameWorld)
@@ -15,7 +15,7 @@ class GameServer(worldId:Int): Server(worldId) {
         gameWorld.worldId = worldId
         objectMover.start()
     }
-    override fun resendMessage(msg:String) {
+    override fun resendMessage(msg: String) {
         super.resendMessage(msg)
         worldSynchronizer.updateWorld(msg)
     }
