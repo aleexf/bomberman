@@ -2,8 +2,8 @@ package com.aleexf.game.world
 
 import com.aleexf.game.Player
 import com.aleexf.game.world.cell.*
-import com.aleexf.game.sound.Sounds
-import com.aleexf.game.sound.Player.playSound
+import com.aleexf.game.sound.Sound
+import com.aleexf.game.sound.SoundPlayer
 
 class Detonator(val world: GameWorld, val player: Player): Thread() {
     override fun run() {
@@ -22,7 +22,7 @@ class Detonator(val world: GameWorld, val player: Player): Thread() {
                 return true
             }
         }
-        world.explosion.add(Explosion(px, py))
+        world.objects.add(Explosion(px, py))
         for (player in world.players) {
             if (player.x/32 == px && player.y/32 == py) {
                 player.alive = false
@@ -39,34 +39,21 @@ class Detonator(val world: GameWorld, val player: Player): Thread() {
     }
     private fun detonate(bomb: Bomb) {
         if (!world.objects.contains(bomb)) return
-        if (!world.onServer) playSound(Sounds.EXPLOSION)
+        if (!world.onServer) SoundPlayer(Sound.EXPLOSION).play()
         world.objects.remove(bomb)
         bomb.owner.availableBombs++
         var px = bomb.x
         var py = bomb.y
         doExplosion(px, py)
-        for (i in 1..bomb.explosionLen) {
-            --px
-            if (doExplosion(px, py)) break
-        }
+        for (i in 1..bomb.explosionLen) if (doExplosion(--px, py)) break
         px = bomb.x
         py = bomb.y
-        for (i in 1..bomb.explosionLen) {
-            ++px
-            if (doExplosion(px, py)) break
-        }
+        for (i in 1..bomb.explosionLen) if (doExplosion(++px, py)) break
         px = bomb.x
         py = bomb.y
-        for (i in 1..bomb.explosionLen) {
-            ++py
-            if (doExplosion(px, py)) break
-        }
+        for (i in 1..bomb.explosionLen) if (doExplosion(px, ++py)) break
         px = bomb.x
         py = bomb.y
-        for (i in 1..bomb.explosionLen) {
-            --py
-            if (doExplosion(px, py)) break
-        }
-
+        for (i in 1..bomb.explosionLen) if (doExplosion(px, --py)) break
     }
 }

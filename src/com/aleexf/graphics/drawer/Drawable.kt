@@ -11,5 +11,5 @@ interface Drawable {
     val priority: Int
     var texture: Image
 
-    fun drawIn(graph: Graphics)
+    fun drawIt(graph: Graphics)
 }

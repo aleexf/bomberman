@@ -1,6 +1,7 @@
 package com.aleexf.game.world.cell
 
 import java.awt.Image
+import javax.swing.Timer
 
 import com.aleexf.graphics.drawer.Animationable
 import com.aleexf.graphics.drawer.TextureManager
@@ -16,14 +17,17 @@ class Explosion(x: Int, y: Int) :
     override var texture: Image = TextureManager.iExplosion[0]
     override val priority: Int = 10
 
-    override var animState: Int? = 0
-    override val animDelay: Long = 30
-    override fun nextAnimState() {
-        if (animState == 31) {
+    override var animState: Long? = 0
+    override val animDelay: Long? = 30
+    override val creationTime = System.currentTimeMillis()
+
+
+    override fun updateAnimState() {
+        if (animState == null || animState!! >= 31) {
             animState = null
             return
         }
-        animState = animState!! + 1
-        texture = TextureManager.iExplosion[animState!!]
+        animState = (System.currentTimeMillis() - creationTime) / animDelay!!
+        texture = TextureManager.iExplosion[animState!!.toInt()]
     }
 }

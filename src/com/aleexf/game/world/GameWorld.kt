@@ -10,7 +10,6 @@ class GameWorld(val nick: String, val onServer: Boolean) {
     var worldId = 0
     val spawnCrd: MutableMap<Int, List<Int>> = mutableMapOf()
     val objects: MutableList<Object> = mutableListOf()
-    val explosion: MutableList<Explosion> = mutableListOf()
     val players: MutableList<Player> = mutableListOf()
     val worldLoader = WorldLoader(this)
 
@@ -24,6 +23,6 @@ class GameWorld(val nick: String, val onServer: Boolean) {
             || players.filter { it.collision >= collision && it.alive }
                       .any { it.x == x && it.y == y }
     }
-    fun loadWorld(worldId:Int) = worldLoader.loadWorld(worldId)
+    fun loadWorld(worldId: Int) = worldLoader.loadWorld(worldId)
 }
 

@@ -1,23 +1,28 @@
 package com.aleexf.game.sound
 
-import com.aleexf.logging.Logger
 import java.io.File
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
 import javax.sound.sampled.FloatControl
 
-fun loadSound(path:String, volume:Double): Clip? {
-    try {
-        val clip = AudioSystem.getClip()
-        clip.open(AudioSystem.getAudioInputStream(File(path)))
+import com.aleexf.logging.LoggingFactories
 
-        val gControl = clip.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
-        gControl.value = volume.toFloat()
+object SoundLoader {
+    private val logger by lazy { LoggingFactories.clientFactory.getLogger(this.javaClass.name) }
 
-        return clip
-    } catch (e:Exception) {
-        Logger.error("File not found", "Sound ${path} not found", false)
-        Logger.error("[Exception]: ", e.toString())
+    fun loadSound(path: String, volume: Double): Clip? {
+        try {
+            val clip = AudioSystem.getClip()
+            clip.open(AudioSystem.getAudioInputStream(File(path)))
+
+            val gControl = clip.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
+            gControl.value = volume.toFloat()
+
+            return clip
+        } catch (e: Exception) {
+            logger.error("Sound at ${path} not found")
+            logger.warning(e.toString())
+        }
+        return null
     }
-    return null
 }

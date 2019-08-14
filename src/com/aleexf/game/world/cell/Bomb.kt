@@ -7,15 +7,15 @@ import com.aleexf.graphics.drawer.TextureManager
 import java.awt.Graphics
 
 class Bomb(
-        x:Int,
-        y:Int,
-        val delay:Long,
-        val owner:Player,
+        x: Int,
+        y: Int,
+        val delay: Long,
+        val owner: Player,
         val explosionLen: Int
 ): Object(x, y, true, 2) {
 
-    var realX = x*32+16
-    var realY = y*32+16
+    var realX = x * 32 + 16
+    var realY = y * 32 + 16
     var speedX = 0
     var speedY = 0
 
@@ -26,7 +26,7 @@ class Bomb(
     override val priority: Int = 0
     override var texture: Image = TextureManager.iBomb
 
-    override fun drawIn(graph: Graphics) {
+    override fun drawIt(graph: Graphics) {
         graph.drawImage(texture,
                 realY - rSizeY / 2, realX - rSizeX / 2,
                 realY + rSizeY / 2, realX + rSizeX / 2,

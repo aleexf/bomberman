@@ -3,11 +3,8 @@ package com.aleexf.graphics.drawer
 import java.awt.Image
 import java.io.File
 import javax.imageio.ImageIO
-import java.lang.System.exit
 
-import com.aleexf.logging.Logger
 import com.aleexf.logging.LoggingFactories
-import java.awt.image.ImagingOpException
 import java.lang.Exception
 
 object TextureManager {
@@ -49,10 +46,10 @@ object TextureManager {
             }
         }
         iExplosion = List(32) {
-            loadTexture("./data/texture/explosion/expl-${if (it < 10) "0"+it.toString() else it.toString()}.png")
+            loadTexture("./data/texture/explosion/expl-${if (it < 10) "0" + it.toString() else it.toString()}.png")
         }
         iTeleport = List(3) {
-                loadTexture("./data/texture/teleport/0$it.png")
+            loadTexture("./data/texture/teleport/0$it.png")
         }
     }
     private fun loadTexture(path:String): Image {
@@ -64,6 +61,8 @@ object TextureManager {
         } catch (e: Exception) {
             logger.error("Parsing of $path failed")
             throw e
+        } finally {
+            logger.info("Texture at $path loaded!")
         }
     }
 }

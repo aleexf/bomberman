@@ -1,20 +1,21 @@
 package com.aleexf.game.sound
 
-object Player:Thread() {
-    fun playSound(s:Sounds, loop:Boolean = false) {
+class SoundPlayer(val s: Sound, var loop: Boolean = false) {
+    fun play() {
         object: Thread() {
             init {
                 isDaemon = true
                 this.start()
             }
             override fun run() {
-                playIt()
+                playOnce()
                 while (loop && s.sound != null) {
-                    playIt()
+                    playOnce()
                 }
                 s.sound?.stop()
             }
-            fun playIt() {
+
+            private fun playOnce() {
                 s.sound?.let {
                     it.framePosition = 0
                     it.start()
@@ -22,8 +23,10 @@ object Player:Thread() {
                     it.stop()
                 }
             }
-
         }
     }
-
+    fun stop() {
+        loop = false
+        s.sound?.stop()
+    }
 }

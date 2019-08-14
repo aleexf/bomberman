@@ -1,8 +1,9 @@
 package com.aleexf.graphics.drawer
 
 interface Animationable {
-    var animState: Int?
+    var animState: Long?
     val animDelay: Long?
+    val creationTime: Long?
 
-    fun nextAnimState()
+    fun updateAnimState()
 }

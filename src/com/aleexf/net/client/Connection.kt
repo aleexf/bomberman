@@ -6,12 +6,11 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 
 import com.aleexf.config.Config
-import com.aleexf.logging.Logger
 import com.aleexf.logging.LoggingFactories
 
 class Connection(val nick: String, val ip: String) {
-    val socket: Socket
     val localId: Int
+    private val socket: Socket
     private val port = Config.Port
     private val iStream: BufferedReader
     private val oStream: PrintWriter
@@ -30,6 +29,6 @@ class Connection(val nick: String, val ip: String) {
             localId = msg.toInt()
         }
     }
-    fun sendMessage(str:String) = oStream.println(str)
+    fun sendMessage(str: String) = oStream.println(str)
     fun getMessage() = iStream.readLine()
 }

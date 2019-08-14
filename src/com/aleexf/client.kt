@@ -4,7 +4,7 @@ import com.aleexf.game.world.GameWorld
 import com.aleexf.game.drawer.WorldDrawer
 import com.aleexf.game.world.ObjectMover
 import com.aleexf.game.world.WorldSync
-import com.aleexf.game.sound.Sounds
+import com.aleexf.game.sound.Sound
 import com.aleexf.game.sound.Player
 import com.aleexf.net.client.Connection
 import com.aleexf.gui.MainMenu
@@ -48,7 +48,7 @@ fun main(args:Array<String>) {
         worldSynchronizer.start()
         objectMover.start()
 
-        Player.playSound(Sounds.BACKGROUND1.randomBackground(), loop = true)
+        Player.playSound(Sound.BACKGROUND1.randomBackground(), loop = true)
 
         connection.sendMessage("game init")
         Thread.sleep(100)

@@ -16,9 +16,11 @@ class Teleport(x: Int, y: Int, val index: Int, var other: Teleport? = null):
     override var texture: Image = TextureManager.iBox
     override val priority: Int = 1
 
-    override var animState: Int? = 0
+    override var animState: Long? = 0
     override val animDelay: Long = 0
-    override fun nextAnimState() {
+    override val creationTime: Long? = System.currentTimeMillis()
 
+    override fun updateAnimState() {
+        
     }
 }

@@ -9,7 +9,7 @@ abstract class Object(
     val breakByExplosion: Boolean,
     var collision: Int
 ) : Drawable {
-    override fun drawIn(graph: Graphics) {
+    override fun drawIt(graph: Graphics) {
         graph.drawImage(
                 texture,
                 y * 32, x * 32,

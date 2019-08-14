@@ -22,7 +22,7 @@ class XMLObject() {
         }
     }
 
-    private constructor(content: String):this() {
+    private constructor(content: String): this() {
         this.value = content
     }
 
@@ -33,28 +33,22 @@ class XMLObject() {
         private val dInstance = DocumentBuilderFactory.newInstance()
 
         fun content(obj: XMLObject) = obj.value
-        fun content(array: Array<XMLObject>): Array<String?> {
-            val list = mutableListOf<String?>()
-            for (obj in array) list.add(content(obj))
-            return list.toTypedArray()
-        }
+
+        fun content(array: Array<XMLObject>): Array<String?> =
+            array.asSequence().map { content(it) }.toList().toTypedArray()
 
         fun contentToInt(obj: XMLObject) = obj.value?.toIntOrNull()
-        fun contentToInt(array: Array<XMLObject>): Array<Int?> {
-            val list = mutableListOf<Int?>()
-            for (obj in array) list.add(contentToInt(obj))
-            return list.toTypedArray()
-        }
+
+        fun contentToInt(array: Array<XMLObject>): Array<Int?> =
+            array.asSequence().map { contentToInt(it) }.toList().toTypedArray()
     }
 
-    operator fun get(key: String) = children.firstOrNull {it.first == key}?.second ?: XMLObject()
-    fun getAllEntries(key: String): Array<XMLObject> {
-        val entries = children.filter { it.first == key }
-        val objects = mutableListOf<XMLObject>()
-        for((_, value) in entries) {
-            objects.add(value)
-        }
-        return objects.toTypedArray()
-    }
+    operator fun get(key: String) = children.firstOrNull { it.first == key }?.second ?: XMLObject()
+
+    fun getAllEntries(key: String): Array<XMLObject> =
+        children.filter { it.first == key }
+                .map { it.second }
+                .toTypedArray()
+
     fun containsTag(tagName: String) = children.any { it.first == tagName }
 }

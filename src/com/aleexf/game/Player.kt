@@ -22,22 +22,23 @@ class Player(x: Int, y: Int, val name: String, val playerId: Int, val world: Gam
     override var rSizeX: Int = 32
     override var rSizeY: Int = 32
     override var texture: Image = TextureManager.iPlayer[playerId][0]
-    override val priority: Int = 228
+    override val priority: Int = 1337
 
-    override var animState: Int? = 0
+    override var animState: Long? = 0
     override val animDelay: Long? = null
-    override fun nextAnimState() {
+    override val creationTime: Long? = null
+    override fun updateAnimState() {
         val imgId = when (this.direction) {
             Direction.UP -> 0
             Direction.DOWN -> 3
             Direction.LEFT -> 6
             Direction.RIGHT -> 9
         }
-        this.texture = TextureManager.iPlayer[playerId][imgId + animState!!]
+        this.texture = TextureManager.iPlayer[playerId][imgId + animState!!.toInt()]
         animState = animState!! + 1
     }
 
-    override fun drawIn(graph: Graphics) {
+    override fun drawIt(graph: Graphics) {
         graph.drawImage(texture,
                 y - rSizeY / 2, x + rSizeX / 2,
                 y + rSizeX / 2, x + rSizeX / 2,
@@ -81,7 +82,7 @@ class Player(x: Int, y: Int, val name: String, val playerId: Int, val world: Gam
         this.x = this.x + dir.dx * speed
         this.y = this.y + dir.dy * speed
         direction = dir
-        this.nextAnimState()
+        this.updateAnimState()
     }
     fun resetStats() {
         alive            = false

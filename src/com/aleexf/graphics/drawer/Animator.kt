@@ -6,10 +6,14 @@ class Animator(val world: GameWorld): Thread() {
     init {
         isDaemon = true
     }
+
     override fun run() {
         while (true) {
-            //! each object in corutine
-            //! Remove when its removed
+            sleep(50)
+            world.objects.forEach {
+                if (it is Animationable && it.animDelay != null)
+                    it.updateAnimState()
+            }
         }
     }
 }

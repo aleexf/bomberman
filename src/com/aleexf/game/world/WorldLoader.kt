@@ -22,13 +22,12 @@ class WorldLoader(private val world: GameWorld) {
         val dataFile: File = try {
             File(path)
         } catch (e: NoSuchFileException) {
-            logger.error("Failed to open $path file. File doesn't exists")
+            logger.error("Cannot open file at $path. File doesn't exists")
             logger.error(e.toString())
             throw e
         }
         val data = XMLObject(dataFile)["Level"]
         world.objects.clear()
-        world.explosion.clear()
 
         try {
             var x = XMLObject.contentToInt(data["Map"]["HeavyBoxes"].getAllEntries("x")).requireNoNulls()

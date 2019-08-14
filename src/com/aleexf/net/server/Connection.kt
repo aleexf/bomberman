@@ -5,7 +5,6 @@ import java.io.PrintWriter
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-import com.aleexf.logging.Logger
 import com.aleexf.logging.LoggingFactories
 
 class Connection(val server: Server, val socket: Socket, val id: Int) : Thread() {
@@ -38,7 +37,7 @@ class Connection(val server: Server, val socket: Socket, val id: Int) : Thread()
                 "disconnect $id" -> this.close()
                 "get_world_id" -> this.sendMessage(server.worldId.toString())
                 "game init" -> {
-                    server.connections.forEach{
+                    server.connections.forEach {
                         if (it != this) sendMessage("player connected ${it.nick} ${it.id}")
                     }
                     server.resendMessage("player connected $nick $id")
