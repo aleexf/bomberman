@@ -8,7 +8,7 @@ import java.io.PrintWriter
 import com.aleexf.config.Config
 import com.aleexf.logging.LoggingFactories
 
-class Connection(val nick: String, val ip: String) {
+class Connection(nick: String, val ip: String) {
     val localId: Int
     private val socket: Socket
     private val port = Config.Port
@@ -29,6 +29,10 @@ class Connection(val nick: String, val ip: String) {
             localId = msg.toInt()
         }
     }
-    fun sendMessage(str: String) = oStream.println(str)
+//    fun sendMessage(str: String) = oStream.println(str)
+    fun sendMessage(str: String) {
+        logger.info("Sending \"$str\"")
+        oStream.println(str)
+    }
     fun getMessage() = iStream.readLine()
 }

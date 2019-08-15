@@ -35,12 +35,12 @@ class Player(x: Int, y: Int, val name: String, val playerId: Int, val world: Gam
             Direction.RIGHT -> 9
         }
         this.texture = TextureManager.iPlayer[playerId][imgId + animState!!.toInt()]
-        animState = animState!! + 1
+        animState = (animState!! + 1) % 3
     }
 
     override fun drawIt(graph: Graphics) {
         graph.drawImage(texture,
-                y - rSizeY / 2, x + rSizeX / 2,
+                y - rSizeY / 2, x - rSizeX / 2,
                 y + rSizeX / 2, x + rSizeX / 2,
                 0, 0,
                 tSizeY, tSizeX,
@@ -57,7 +57,6 @@ class Player(x: Int, y: Int, val name: String, val playerId: Int, val world: Gam
     var explosionLen   = Config.PlayerExplosionLen
     var availableBombs = Config.PlayerBombCount
 
-    var animType = 0
     var direction = Direction.DOWN
 
     fun placeBomb(): Bomb = Bomb(x/32, y/32, bombDelay, this, explosionLen)
@@ -94,7 +93,6 @@ class Player(x: Int, y: Int, val name: String, val playerId: Int, val world: Gam
         explosionLen   = Config.PlayerExplosionLen
         availableBombs = Config.PlayerBombCount
 
-        animType = 0
         direction = Direction.DOWN
     }
     fun applyBonus(b: Bonus) {

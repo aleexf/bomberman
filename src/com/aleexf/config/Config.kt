@@ -1,7 +1,7 @@
 package com.aleexf.config
 
 object Config {
-    const val Version = "~2.0.4"
+    const val Version = "~2.0.5"
 
     // Game
     const val GameFieldRows = 15

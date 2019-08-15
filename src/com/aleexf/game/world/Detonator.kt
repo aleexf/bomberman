@@ -9,15 +9,16 @@ class Detonator(val world: GameWorld, val player: Player): Thread() {
     override fun run() {
         if (player.availableBombs == 0) return
         if (world.anyObject(2, player.x/32, player.y/32)) return
-        val bomb:Bomb = player.placeBomb()
+        val bomb: Bomb = player.placeBomb()
         bomb.owner.availableBombs--
         world.objects.add(bomb)
         sleep(bomb.delay)
         if (!world.objects.contains(bomb)) return
         detonate(bomb)
     }
-    private fun doExplosion(px:Int, py:Int): Boolean {
+    private fun doExplosion(px: Int, py: Int): Boolean {
         for (block in world.objects) {
+            if (block is Explosion) continue
             if (block.x == px && block.y == py && !block.breakByExplosion) {
                 return true
             }

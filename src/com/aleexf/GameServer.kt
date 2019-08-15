@@ -7,7 +7,7 @@ import com.aleexf.game.world.HostWorldControl
 import com.aleexf.net.server.Server
 
 class GameServer(worldId: Int) : Server(worldId) {
-    private val gameWorld = GameWorld("server", true)
+    private val gameWorld = GameWorld(true)
     private val hostWorldControl = HostWorldControl(gameWorld, this::resendMessage)
     private val worldSynchronizer = WorldSync(gameWorld, null, hostWorldControl)
     private val objectMover = ObjectMover(gameWorld)

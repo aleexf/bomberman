@@ -46,7 +46,7 @@ object TextureManager {
             }
         }
         iExplosion = List(32) {
-            loadTexture("./data/texture/explosion/expl-${if (it < 10) "0" + it.toString() else it.toString()}.png")
+            loadTexture("./data/texture/explosion/expl-${if (it < 10) "0$it" else it.toString()}.png")
         }
         iTeleport = List(3) {
             loadTexture("./data/texture/teleport/0$it.png")
@@ -61,8 +61,6 @@ object TextureManager {
         } catch (e: Exception) {
             logger.error("Parsing of $path failed")
             throw e
-        } finally {
-            logger.info("Texture at $path loaded!")
         }
     }
 }

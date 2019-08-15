@@ -23,7 +23,7 @@ class WorldLoader(private val world: GameWorld) {
             File(path)
         } catch (e: NoSuchFileException) {
             logger.error("Cannot open file at $path. File doesn't exists")
-            logger.error(e.toString())
+            logger.warning(e.toString())
             throw e
         }
         val data = XMLObject(dataFile)["Level"]
@@ -50,19 +50,19 @@ class WorldLoader(private val world: GameWorld) {
             for (i in 0 until x.size) {
                 world.spawnCrd[i] = listOf(x[i] * 32 + 16, y[i] * 32 + 16)
             }
-            for (i in 1..3) {
-                if (data["Map"]["Teleport"].containsTag("tp-$i")) {
-                    val x1 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["x1"])!!
-                    val y1 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["y1"])!!
-                    val x2 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["x1"])!!
-                    val y2 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["y1"])!!
-                    val tp1 = Teleport(x1, y1, i - 1)
-                    val tp2 = Teleport(x2, y2, i - 1, tp1)
-                    tp1.other = tp2
-                    world.objects.add(tp1)
-                    world.objects.add(tp2)
-                }
-            }
+//            for (i in 1..3) {
+//                if (data["Map"]["Teleport"].containsTag("tp-$i")) {
+//                    val x1 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["x1"])!!
+//                    val y1 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["y1"])!!
+//                    val x2 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["x1"])!!
+//                    val y2 = XMLObject.contentToInt(data["Map"]["Teleport"]["tp-$i"]["y1"])!!
+//                    val tp1 = Teleport(x1, y1, i - 1)
+//                    val tp2 = Teleport(x2, y2, i - 1, tp1)
+//                    tp1.other = tp2
+//                    world.objects.add(tp1)
+//                    world.objects.add(tp2)
+//                }
+//            }
 
         } catch (e: Exception) {
             logger.error("Failed to load level-$worldId.xml\nSee logs to get more information")

@@ -1,7 +1,6 @@
 package com.aleexf.game.world.cell
 
 import java.awt.Image
-import javax.swing.Timer
 
 import com.aleexf.graphics.drawer.Animationable
 import com.aleexf.graphics.drawer.TextureManager
@@ -23,11 +22,12 @@ class Explosion(x: Int, y: Int) :
 
 
     override fun updateAnimState() {
-        if (animState == null || animState!! >= 31) {
+        if (animState == null) return
+        animState = (System.currentTimeMillis() - creationTime) / animDelay!!
+        if (animState!! >= 31) {
             animState = null
             return
         }
-        animState = (System.currentTimeMillis() - creationTime) / animDelay!!
         texture = TextureManager.iExplosion[animState!!.toInt()]
     }
 }

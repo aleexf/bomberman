@@ -33,6 +33,7 @@ class Connection(val server: Server, val socket: Socket, val id: Int) : Thread()
         sleep(100)
         while (!socket.isClosed) {
             val message = iStream.readLine()
+            logger.info("Got \"$message\"")
             when (message) {
                 "disconnect $id" -> this.close()
                 "get_world_id" -> this.sendMessage(server.worldId.toString())

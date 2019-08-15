@@ -4,14 +4,14 @@ import com.aleexf.config.Config
 import com.aleexf.game.Player
 import com.aleexf.game.world.cell.*
 
-class GameWorld(val nick: String, val onServer: Boolean) {
+class GameWorld(val onServer: Boolean) {
     val rows = Config.GameFieldRows
     val cols = Config.GameFieldCols
     var worldId = 0
     val spawnCrd: MutableMap<Int, List<Int>> = mutableMapOf()
     val objects: MutableList<Object> = mutableListOf()
     val players: MutableList<Player> = mutableListOf()
-    val worldLoader = WorldLoader(this)
+    private val worldLoader = WorldLoader(this)
 
     fun findPlayerById(playerId: Int): Player {
         return players.firstOrNull { it.playerId == playerId }
