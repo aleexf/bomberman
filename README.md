@@ -2,13 +2,18 @@
 ## About
 It is a [bomberman game](https://en.wikipedia.org/wiki/Bomberman). The main goal of this project is to improve my knowledge of Kotlin lang.
 
+![](misc/screenshot-1.png)
+![](misc/screenshot-2.png)
+
 ## Data
 All data files were downloaded from the following sources, some of them have been modified
 ### Textures:
 <http://kenney.nl>
+
 <https://opengameart.org>
 ### Sounds:
 <http://soundimage.org>
+
 <https://freesound.org>
 
 ## How to play:
