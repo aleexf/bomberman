@@ -2,8 +2,8 @@
 ## About
 It is a [bomberman game](https://en.wikipedia.org/wiki/Bomberman). The main goal of this project is to improve my knowledge of Kotlin lang.
 
-![](misc/screenshot-1.png)
-![](misc/screenshot-2.png)
+<img src="misc/screenshot-1.png" alt="screenshot" width="300"/>
+<img src="misc/screenshot-2.png" alt="screenshot" width="300"/>
 
 ## Data
 All data files were downloaded from the following sources, some of them have been modified
